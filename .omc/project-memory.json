@@ -1,0 +1,462 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1775969909435,
+  "projectRoot": "E:\\opensource\\gearl-cowork-pure",
+  "techStack": {
+    "languages": [
+      {
+        "name": "JavaScript/TypeScript",
+        "version": ">=24 <25",
+        "confidence": "high",
+        "markers": [
+          "package.json"
+        ]
+      },
+      {
+        "name": "TypeScript",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "tsconfig.json"
+        ]
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "react",
+        "version": "18.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "react-dom",
+        "version": "18.2.0",
+        "category": "frontend"
+      },
+      {
+        "name": "vite",
+        "version": "5.1.4",
+        "category": "build"
+      }
+    ],
+    "packageManager": "npm",
+    "runtime": "Node.js 2425"
+  },
+  "build": {
+    "buildCommand": "npm run build",
+    "testCommand": null,
+    "lintCommand": "npm run lint",
+    "devCommand": "npm run dev",
+    "scripts": {
+      "dev": "vite",
+      "build": "tsc && vite build",
+      "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+      "test:memory": "npm run compile:electron && node --test tests/coworkMemoryExtractor.test.mjs",
+      "preview": "vite preview",
+      "compile:electron": "tsc --project electron-tsconfig.json",
+      "build:skill:web-search": "npm install --prefix SKILLs/web-search && npx tsc -p SKILLs/web-search/tsconfig.json",
+      "build:skill:tech-news": "node scripts/build-skill-tech-news.js",
+      "build:skill:email": "cd SKILLs/imap-smtp-email && npm install --production",
+      "build:skills": "npm run build:skill:web-search && npm run build:skill:tech-news && npm run build:skill:email",
+      "start:electron": "cross-env NODE_ENV=development ELECTRON_START_URL=http://localhost:5175 electron .",
+      "electron:dev": "rimraf dist-electron && npm run compile:electron && concurrently \"vite --port 5175\" \"wait-on -v -t 120000 -d 10000 http://localhost:5175 && npm run start:electron\"",
+      "postinstall": "patch-package && electron-builder install-app-deps",
+      "pack": "npm run setup:mingit && npm run setup:python-runtime && npm run build && npm run compile:electron && npm run build:skills && electron-builder --dir",
+      "dist": "npm run setup:mingit && npm run setup:python-runtime && npm run build && npm run compile:electron && npm run build:skills && electron-builder",
+      "dist:mac": "node -r dotenv/config node_modules/.bin/electron-builder --mac --config electron-builder.json",
+      "predist:mac": "npm run build && npm run compile:electron && npm run build:skills",
+      "dist:mac:x64": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --x64",
+      "dist:mac:arm64": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --arm64",
+      "dist:mac:universal": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --universal",
+      "dist:win": "npm run setup:mingit && npm run setup:python-runtime && npm run build && npm run compile:electron && npm run build:skills && electron-builder --win --x64",
+      "dist:linux": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --linux",
+      "sandbox:image:mac": "bash scripts/build-sandbox-image-mac.sh",
+      "sandbox:image:win:mac": "bash scripts/build-sandbox-image-win-on-mac.sh",
+      "sandbox:image:docker": "bash scripts/build-sandbox-image-docker.sh",
+      "clean:release": "rimraf release",
+      "generate:tray-icons": "node scripts/generate-tray-icons.js",
+      "setup:mingit": "node scripts/setup-mingit.js",
+      "setup:python-runtime": "node scripts/setup-python-runtime.js",
+      "regenerate:icon": "bash scripts/regenerate-mac-icon.sh",
+      "fix:mac-icon": "bash scripts/fix-mac-icon-display.sh"
+    }
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [
+      "docs",
+      "public",
+      "scripts",
+      "src",
+      "tests"
+    ],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "build": {
+      "path": "build",
+      "purpose": "Build output",
+      "fileCount": 1,
+      "lastAccessed": 1775969909370,
+      "keyFiles": [
+        "entitlements.mac.plist"
+      ]
+    },
+    "docs": {
+      "path": "docs",
+      "purpose": "Documentation",
+      "fileCount": 0,
+      "lastAccessed": 1775969909371,
+      "keyFiles": []
+    },
+    "patches": {
+      "path": "patches",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1775969909405,
+      "keyFiles": [
+        "@anthropic-ai+claude-agent-sdk+0.2.12.patch"
+      ]
+    },
+    "public": {
+      "path": "public",
+      "purpose": "Public files",
+      "fileCount": 11,
+      "lastAccessed": 1775969909406,
+      "keyFiles": [
+        "dingding.png",
+        "discord.svg",
+        "feishu.png",
+        "logo.png",
+        "nim.png"
+      ]
+    },
+    "resources": {
+      "path": "resources",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1775969909406,
+      "keyFiles": [
+        "error.html"
+      ]
+    },
+    "sandbox": {
+      "path": "sandbox",
+      "purpose": null,
+      "fileCount": 0,
+      "lastAccessed": 1775969909407,
+      "keyFiles": []
+    },
+    "scripts": {
+      "path": "scripts",
+      "purpose": "Build/utility scripts",
+      "fileCount": 22,
+      "lastAccessed": 1775969909407,
+      "keyFiles": [
+        "build-sandbox-image-docker.sh",
+        "build-sandbox-image-mac.sh",
+        "build-sandbox-image-win-on-mac.sh",
+        "build-sandbox-image.bat",
+        "build-sandbox-in-wsl.bat"
+      ]
+    },
+    "SKILLs": {
+      "path": "SKILLs",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1775969909408,
+      "keyFiles": [
+        "skills.config.json"
+      ]
+    },
+    "src": {
+      "path": "src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1775969909409,
+      "keyFiles": []
+    },
+    "tests": {
+      "path": "tests",
+      "purpose": "Test files",
+      "fileCount": 3,
+      "lastAccessed": 1775969909409,
+      "keyFiles": [
+        "coworkOpenAICompatProxy.responses.test.mjs",
+        "coworkOpenAICompatProxy.sseBoundary.test.mjs",
+        "skillFrontmatter.test.mjs"
+      ]
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "README.md",
+      "accessCount": 16,
+      "lastAccessed": 1776042089481,
+      "type": "file"
+    },
+    {
+      "path": "README_zh.md",
+      "accessCount": 15,
+      "lastAccessed": 1776042113701,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\services\\i18n.ts",
+      "accessCount": 11,
+      "lastAccessed": 1776041122782,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\main.ts",
+      "accessCount": 10,
+      "lastAccessed": 1776041608241,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\web-search\\package.json",
+      "accessCount": 6,
+      "lastAccessed": 1776041573484,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\trayManager.ts",
+      "accessCount": 5,
+      "lastAccessed": 1776041140197,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 4,
+      "lastAccessed": 1776041084967,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\components\\Settings.tsx",
+      "accessCount": 4,
+      "lastAccessed": 1776041173571,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\coworkStore.ts",
+      "accessCount": 4,
+      "lastAccessed": 1776041219274,
+      "type": "file"
+    },
+    {
+      "path": "CLAUDE.md",
+      "accessCount": 4,
+      "lastAccessed": 1776041375354,
+      "type": "file"
+    },
+    {
+      "path": "AGENTS.md",
+      "accessCount": 4,
+      "lastAccessed": 1776041538516,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\logger.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776041202447,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\skillManager.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776041285779,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\libs\\appUpdateInstaller.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776041331917,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\skills.config.json",
+      "accessCount": 3,
+      "lastAccessed": 1776041412149,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\generate-app-icon.js",
+      "accessCount": 2,
+      "lastAccessed": 1775978117065,
+      "type": "file"
+    },
+    {
+      "path": "scripts\\generate-tray-icons.js",
+      "accessCount": 2,
+      "lastAccessed": 1775978118204,
+      "type": "file"
+    },
+    {
+      "path": "src/main/main.ts",
+      "accessCount": 2,
+      "lastAccessed": 1775979468111,
+      "type": "directory"
+    },
+    {
+      "path": "src\\main\\appConstants.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041097626,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\constants\\app.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041123706,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\services\\endpoints.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041174543,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\libs\\coworkUtil.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041294810,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\libs\\coworkRunner.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041295916,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\libs\\claudeSettings.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041308084,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\imGatewayManager.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041310230,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\dingtalkMediaParser.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041311170,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\xiaomifengGateway.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041328897,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\nimMedia.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041329961,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\nimGateway.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041330988,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\im\\dingtalkGateway.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776041332889,
+      "type": "file"
+    },
+    {
+      "path": "sandbox\\agent-runner\\AGENT_SYSTEM_PROMPT.md",
+      "accessCount": 2,
+      "lastAccessed": 1776041363361,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\components\\cowork\\CoworkView.tsx",
+      "accessCount": 1,
+      "lastAccessed": 1775978123629,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\web-search\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1775979436500,
+      "type": "file"
+    },
+    {
+      "path": "src",
+      "accessCount": 1,
+      "lastAccessed": 1775979450997,
+      "type": "directory"
+    },
+    {
+      "path": "SKILLs\\develop-web-game\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041405759,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\imap-smtp-email\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041405802,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\local-tools\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041405940,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\seedance\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041413734,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\seedream\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041413774,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\playwright\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041413858,
+      "type": "file"
+    },
+    {
+      "path": "SKILLs\\technology-news-search\\SKILL.md",
+      "accessCount": 1,
+      "lastAccessed": 1776041413920,
+      "type": "file"
+    },
+    {
+      "path": "src\\main\\preload.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776041587922,
+      "type": "file"
+    },
+    {
+      "path": "src\\renderer\\services\\cowork.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776041593415,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
