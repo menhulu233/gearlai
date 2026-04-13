@@ -122,7 +122,7 @@ export interface DiscordGatewayStatus {
   lastOutboundAt: number | null;
 }
 
-// ==================== NIM (NetEase IM) Types ====================
+// ==================== NIM Types ====================
 
 export type NimTeamPolicy = 'open' | 'allowlist' | 'disabled';
 export type NimSessionType = 'p2p' | 'team' | 'superTeam';

@@ -196,9 +196,9 @@ const normalizeBaseUrl = (baseUrl: string): string => baseUrl.trim().replace(/\/
 const normalizeApiFormat = (value: unknown): 'anthropic' | 'openai' => (
   value === 'openai' ? 'openai' : 'anthropic'
 );
-const ABOUT_CONTACT_EMAIL = 'gearl.project@rd.netease.com';
-const ABOUT_USER_MANUAL_URL = 'https://gearl.youdao.com/#/docs/gearl_user_manual';
-const ABOUT_SERVICE_TERMS_URL = 'https://c.youdao.com/dict/hardware/gearl/gearl_service.html';
+const ABOUT_CONTACT_EMAIL = 'gearl.project@gearlai.com';
+const ABOUT_USER_MANUAL_URL = 'https://gearlai.com/#/docs/gearl_user_manual';
+const ABOUT_SERVICE_TERMS_URL = 'https://gearlai.com/dict/hardware/gearl/gearl_service.html';
 
 const copyTextFallback = (text: string): boolean => {
   const textarea = document.createElement('textarea');
@@ -2939,10 +2939,10 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               </div>
 
               <p className="mt-5 text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary">
-                {language === 'zh' ? '网易有道 版权所有' : 'NetEase Youdao. All rights reserved.'}
+                {language === 'zh' ? 'GearlAI 版权所有' : 'GearlAI. All rights reserved.'}
               </p>
               <p className="mt-1 text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary">
-                Copyright &copy; {new Date().getFullYear()} NetEase Youdao. All Rights Reserved.
+                Copyright &copy; {new Date().getFullYear()} GearlAI. All Rights Reserved.
               </p>
             </div>
           </div>

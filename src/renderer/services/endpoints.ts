@@ -11,14 +11,14 @@ const isTestMode = () => {
 
 // 自动更新
 export const getUpdateCheckUrl = () => isTestMode()
-  ? 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearl/test/update'
-  : 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearl/prod/update';
+  ? 'http://localhost:18000/openapi/get/luna/hardware/gearlai/test/update'
+  : 'http://localhost:18000/openapi/get/luna/hardware/gearlai/prod/update';
 
 export const getFallbackDownloadUrl = () => isTestMode()
-  ? 'https://gearl.inner.youdao.com/#/download-list'
-  : 'https://gearl.youdao.com/#/download-list';
+  ? 'http://localhost:18000/#/download-list'
+  : 'http://localhost:18000/#/download-list';
 
 // Skill 商店
 export const getSkillStoreUrl = () => isTestMode()
-  ? 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearl/test/skill-store'
-  : 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearl/prod/skill-store';
+  ? 'http://localhost:18000/openapi/get/luna/hardware/gearlai/test/skill-store'
+  : 'http://localhost:18000/openapi/get/luna/hardware/gearlai/prod/skill-store';

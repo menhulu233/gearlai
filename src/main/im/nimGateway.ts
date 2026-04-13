@@ -1,5 +1,5 @@
 /**
- * NIM (NetEase IM) Gateway
+ * NIM Gateway
  * Manages NIM SDK V2 connection for receiving and sending messages
  * Adapted from openclaw-nim for Electron main process
  */

@@ -725,7 +725,7 @@ export class XiaomifengGateway extends EventEmitter {
    * Message format example (from attachment.raw):
    * {
    *   "senderId": "yd.xxx@163.com",
-   *   "chatId": "youdao111@bee.163.com",
+   *   "chatId": "gearl111@bee.163.com",
    *   "msgType": 1,
    *   "content": "{\"text\":\"用户消息\"}"
    * }

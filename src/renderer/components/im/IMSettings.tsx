@@ -961,7 +961,7 @@ const IMSettings: React.FC = () => {
           </div>
         )}
 
-        {/* NIM (NetEase IM) Settings */}
+        {/* NIM Settings */}
         {activePlatform === 'nim' && (
           <div className="space-y-3">
             {/* How to get NIM credentials */}
@@ -970,7 +970,7 @@ const IMSettings: React.FC = () => {
                 {i18nService.t('nimCredentialsGuide') || '如何获取云信凭证：'}
               </p>
               <ol className="mt-2 text-xs text-blue-600 dark:text-blue-400 space-y-1 list-decimal list-inside">
-                <li>{i18nService.t('nimGuideStep1') || '登录网易云信控制台（yunxin.163.com）'}</li>
+                <li>{i18nService.t('nimGuideStep1') || '登录云信控制台（yunxin.163.com）'}</li>
                 <li>{i18nService.t('nimGuideStep2') || '创建或选择应用，获取 App Key'}</li>
                 <li>{i18nService.t('nimGuideStep3') || '在"账号数-子功能配置"中创建 IM 账号（accid）'}</li>
                 <li>{i18nService.t('nimGuideStep4') || '为该账号生成 Token（密码）- 建议长期有效'}</li>
