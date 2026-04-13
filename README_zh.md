@@ -4,7 +4,7 @@
 
 **Gearl** — 基于 Claude 的桌面 AI Agent 平台，由 Electron 驱动。
 
-*[English](README.md) · [中文](#)*
+*[中文](#)*
 
 </div>
 
