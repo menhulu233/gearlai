@@ -647,6 +647,8 @@ const translations: Record<LanguageType, Record<string, string>> = {
     // 通用设置
     autoLaunch: '开机自启动',
     autoLaunchDescription: '系统启动时自动运行应用',
+    preventSleep: '防止休眠',
+    preventSleepDescription: '防止系统在应用运行时进入睡眠模式',
     useSystemProxy: '使用系统代理',
     useSystemProxyDescription: '开启后网络请求将跟随系统代理（保存后生效）',
 
@@ -1423,6 +1425,8 @@ const translations: Record<LanguageType, Record<string, string>> = {
     // General Settings
     autoLaunch: 'Launch at Login',
     autoLaunchDescription: 'Automatically start the app when you log in',
+    preventSleep: 'Prevent Sleep',
+    preventSleepDescription: 'Prevent the system from sleeping while the app is running',
     useSystemProxy: 'Use System Proxy',
     useSystemProxyDescription: 'When enabled, network requests follow system proxy settings (applies after Save)',
 
