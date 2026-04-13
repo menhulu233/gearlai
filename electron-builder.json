@@ -1,7 +1,7 @@
 {
   "appId": "com.gearl.app",
-  "productName": "Gearl",
-  "executableName": "Gearl",
+  "productName": "GearlAI",
+  "executableName": "GearlAI",
   "directories": {
     "output": "release"
   },

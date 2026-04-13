@@ -24,8 +24,8 @@ resolve_node_runtime() {
     return 0
   fi
 
-  if [ -n "${LOBSTERAI_ELECTRON_PATH:-}" ] && [ -x "${LOBSTERAI_ELECTRON_PATH}" ]; then
-    NODE_CMD="$LOBSTERAI_ELECTRON_PATH"
+  if [ -n "${GEARLAI_ELECTRON_PATH:-}" ] && [ -x "${GEARLAI_ELECTRON_PATH}" ]; then
+    NODE_CMD="$GEARLAI_ELECTRON_PATH"
     NODE_ARGS=()
     NODE_ENV_PREFIX=("ELECTRON_RUN_AS_NODE=1")
     return 0
