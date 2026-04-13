@@ -4,7 +4,7 @@
 
 **鉴玄** — A desktop AI Agent platform powered by Claude, built with Electron.
 
-*[English](#) · [中文](./README_zh.md)*
+*[English](#) · [中文](https://github.com/menhulu233/gearlai/blob/main/README_zh.md)*
 
 </div>
 
