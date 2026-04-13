@@ -1,13 +1,29 @@
-# Gearl
+<div align="center">
 
-**鉴玄** — A desktop AI Agent platform powered by Claude, built with Electron.
+# ![Gearl](public/logo.png#gh-light-mode-only#logo)![Gearl](public/logo.png#gh-dark-mode-only#logo)
 
-Gearl lets you create, configure, and collaborate with AI Agents. Each Agent has its own persona, skill set, and conversation history. Agents can code, research, generate documents, and more — all under your supervision.
+ ### [*鉴玄* · English](#)
+
+---
+
+**Gearl** — A desktop AI Agent platform powered by Claude, built with Electron.
+
+Create Agents with distinct personas, skill sets, and conversation histories. Agents code, research, and generate documents — all under your supervision.
+
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Electron](https://img.shields.io/badge/Electron-40-47848F?style=flat-square&logo=electron&logoColor=white)](https://electronjs.org)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D%2024-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-brightgreen?style=flat-square)](#)
+
+---
+
+</div>
 
 ## Table of Contents
 
 - [Features](#features)
-- [Getting Started](#getting-started)
+- [Quick Start](#quick-start)
 - [Agent System](#agent-system)
 - [Skills & MCP](#skills--mcp)
 - [Memory](#memory)
@@ -18,16 +34,18 @@ Gearl lets you create, configure, and collaborate with AI Agents. Each Agent has
 
 ## Features
 
-- **Multi-Agent** — Create Agents with distinct personas, prompts, and capabilities
-- **Cowork Sessions** — Streamed AI responses with real-time tool execution
-- **Skills** — Reusable capability packages (docx, xlsx, pptx, web search, and more)
-- **MCP Servers** — Connect to Model Context Protocol servers for extended tools
-- **Persistent Memory** — Agents remember your preferences across sessions
-- **Artifacts** — Live preview for HTML, SVG, Mermaid diagrams, and React components
-- **Permission Gate** — Every sensitive operation requires your explicit approval
-- **Cross-Platform** — macOS, Windows, Linux
+| | |
+|---|---|
+| **Multi-Agent** | Create Agents with distinct personas, prompts, and capabilities |
+| **Cowork Sessions** | Streamed AI responses with real-time tool execution |
+| **Skills** | Reusable capability packages (docx, xlsx, pptx, web search, and more) |
+| **MCP Servers** | Connect to Model Context Protocol servers for extended tools |
+| **Persistent Memory** | Agents remember your preferences across sessions |
+| **Artifacts** | Live preview for HTML, SVG, Mermaid, and React components |
+| **Permission Gate** | Every sensitive operation requires your explicit approval |
+| **Cross-Platform** | macOS, Windows, Linux |
 
-## Getting Started
+## Quick Start
 
 ### Requirements
 
@@ -50,16 +68,12 @@ npm run electron:dev
 
 Dev server runs at `http://localhost:5175` with hot-reload.
 
-### Build
+### Build & Distribute
 
 ```bash
 npm run build        # Compile TypeScript + Vite bundle
 npm run lint         # ESLint check
-```
 
-### Distribute
-
-```bash
 npm run dist:mac     # macOS (.dmg)
 npm run dist:win     # Windows (.exe)
 npm run dist:linux   # Linux (.AppImage)
@@ -70,6 +84,7 @@ npm run dist:linux   # Linux (.AppImage)
 ### What is an Agent?
 
 An Agent is a configured AI persona with:
+
 - **Name & description**
 - **System prompt** — custom instructions and behavior guidelines
 - **Skill set** — which Skills are active
@@ -130,9 +145,12 @@ Skills are packaged capabilities Agents can use. Configure them per Agent.
 Model Context Protocol servers extend what Agents can do. Configure MCP servers in **Settings → MCP**.
 
 Supported transport types:
-- **stdio** — Local command-line servers
-- **SSE** — Server-Sent Events over HTTP
-- **HTTP** — Streamable HTTP
+
+| Type | Description |
+|------|-------------|
+| `stdio` | Local command-line servers |
+| `SSE` | Server-Sent Events over HTTP |
+| `HTTP` | Streamable HTTP |
 
 ## Memory
 
@@ -175,6 +193,7 @@ Gearl uses strict process isolation in Electron. All cross-process communication
 ### Process Model
 
 **Main Process** (`src/main/main.ts`)
+
 - Window lifecycle
 - SQLite persistence (sql.js)
 - CoworkRunner — Claude Agent SDK execution
@@ -182,10 +201,12 @@ Gearl uses strict process isolation in Electron. All cross-process communication
 - Security: context isolation on, node integration off, sandbox on
 
 **Preload** (`src/main/preload.ts`)
+
 - Exposes `window.electron` via `contextBridge`
 - `cowork` namespace for session management and streaming
 
 **Renderer** (`src/renderer/`)
+
 - React 18 + Redux Toolkit + Tailwind CSS
 - All UI and business logic
 - IPC-only communication with main process
@@ -205,20 +226,20 @@ src/main/
 
 src/renderer/
 ├── App.tsx              # Root component
-├── types/cowork.ts      # Type definitions
+├── types/cowork.ts       # Type definitions
 ├── store/slices/
-│   ├── coworkSlice.ts   # Session and streaming state
-│   └── artifactSlice.ts # Artifacts state
+│   ├── coworkSlice.ts    # Session and streaming state
+│   └── artifactSlice.ts  # Artifacts state
 ├── services/
-│   ├── cowork.ts        # IPC wrapper, Redux integration
-│   ├── api.ts          # LLM API with SSE streaming
+│   ├── cowork.ts         # IPC wrapper, Redux integration
+│   ├── api.ts           # LLM API with SSE streaming
 │   └── artifactParser.ts # Artifact detection
 └── components/
-    ├── cowork/          # Cowork UI components
-    └── artifacts/       # Artifact renderers
+    ├── cowork/           # Cowork UI components
+    └── artifacts/        # Artifact renderers
 
-SKILLs/                  # Skill definitions
-skills.config.json        # Skill enable/order config
+SKILLs/                   # Skill definitions
+skills.config.json         # Skill enable/order config
 ```
 
 ### Data Storage
@@ -234,11 +255,13 @@ SQLite database (`gearlai.sqlite`) in user data directory.
 
 ## Security
 
-- **Process Isolation** — Context isolation enabled, node integration disabled
-- **Permission Gate** — Sensitive tool calls require explicit user approval
-- **Sandbox** — Optional isolated VM execution environment
-- **IPC Validation** — All cross-process calls are type-checked
-- **Workspace Boundaries** — File operations scoped to designated directories
+| | |
+|---|---|
+| **Process Isolation** | Context isolation enabled, node integration disabled |
+| **Permission Gate** | Sensitive tool calls require explicit user approval |
+| **Sandbox** | Optional isolated VM execution environment |
+| **IPC Validation** | All cross-process calls are type-checked |
+| **Workspace Boundaries** | File operations scoped to designated directories |
 
 ## Tech Stack
 

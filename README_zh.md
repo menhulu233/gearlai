@@ -1,8 +1,24 @@
-# 鉴玄
+<div align="center">
+
+# ![鉴玄](public/logo.png#gh-light-mode-only#logo)![鉴玄](public/logo.png#gh-dark-mode-only#logo)
+
+ ### [*鉴玄* · [English](../README.md)](#)
+
+---
 
 **Gearl** — 基于 Claude 的桌面 AI Agent 平台，由 Electron 驱动。
 
-在鉴玄中，你可以创建、配置多种 AI Agent 角色。每个 Agent 拥有独立的人设、技能和会话历史。Agent 能帮你写代码、查资料、写文档——一切都在你的掌控下进行。
+创建具有不同人设、技能和会话历史的 Agent。Agent 替你写代码、查资料、生成文档——一切都在你的掌控下进行。
+
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
+[![Electron](https://img.shields.io/badge/Electron-40-47848F?style=flat-square&logo=electron&logoColor=white)](https://electronjs.org)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D%2024-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows%20%7C%20Linux-brightgreen?style=flat-square)](#)
+
+---
+
+</div>
 
 ## 目录
 
@@ -18,14 +34,16 @@
 
 ## 核心特性
 
-- **多 Agent** — 创建具有不同人设、提示词和能力的 Agent
-- **Cowork 会话** — AI 响应流式输出，实时执行工具
-- **技能（Skills）** — 可复用能力包（Word、Excel、PPT、网页搜索等）
-- **MCP 服务器** — 通过 Model Context Protocol 服务器扩展工具能力
-- **持久记忆** — Agent 跨会话记住你的偏好
-- **Artifacts** — HTML、SVG、Mermaid、React 组件实时预览
-- **权限门控** — 所有敏感操作需经你明确审批
-- **跨平台** — macOS、Windows、Linux
+| | |
+|---|---|
+| **多 Agent** | 创建具有不同人设、提示词和能力的 Agent |
+| **Cowork 会话** | AI 响应流式输出，实时执行工具 |
+| **技能（Skills）** | 可复用能力包（Word、Excel、PPT、网页搜索等） |
+| **MCP 服务器** | 通过 Model Context Protocol 服务器扩展工具能力 |
+| **持久记忆** | Agent 跨会话记住你的偏好 |
+| **Artifacts 预览** | HTML、SVG、Mermaid、React 组件实时预览 |
+| **权限门控** | 所有敏感操作需经你明确审批 |
+| **跨平台** | macOS、Windows、Linux |
 
 ## 快速开始
 
@@ -50,16 +68,12 @@ npm run electron:dev
 
 开发服务器运行在 `http://localhost:5175`，支持热重载。
 
-### 生产构建
+### 构建与打包
 
 ```bash
 npm run build        # 编译 TypeScript + Vite 打包
 npm run lint         # ESLint 检查
-```
 
-### 打包分发
-
-```bash
 npm run dist:mac     # macOS (.dmg)
 npm run dist:win     # Windows (.exe)
 npm run dist:linux   # Linux (.AppImage)
@@ -70,6 +84,7 @@ npm run dist:linux   # Linux (.AppImage)
 ### 什么是 Agent
 
 Agent 是配置好的 AI 人设，包含：
+
 - **名称和描述**
 - **系统提示词** — 自定义指令和行为规范
 - **技能集** — 启用哪些 Skill
@@ -130,9 +145,12 @@ Agent 是配置好的 AI 人设，包含：
 MCP（Model Context Protocol）服务器扩展 Agent 的能力。在 **设置 → MCP** 中配置。
 
 支持的传输类型：
-- **stdio** — 本地命令行服务器
-- **SSE** — HTTP 上的 Server-Sent Events
-- **HTTP** — 流式 HTTP
+
+| 类型 | 说明 |
+|------|------|
+| `stdio` | 本地命令行服务器 |
+| `SSE` | HTTP 上的 Server-Sent Events |
+| `HTTP` | 流式 HTTP |
 
 ## 记忆
 
@@ -173,6 +191,7 @@ Artifacts 将代码输出渲染为可交互的预览。
 ### 进程模型
 
 **主进程**（`src/main/main.ts`）
+
 - 窗口生命周期管理
 - SQLite 持久化（sql.js）
 - CoworkRunner — Claude Agent SDK 执行引擎
@@ -180,10 +199,12 @@ Artifacts 将代码输出渲染为可交互的预览。
 - 安全：context isolation 启用，node integration 禁用，sandbox 启用
 
 **预加载脚本**（`src/main/preload.ts`）
+
 - 通过 `contextBridge` 暴露 `window.electron` API
 - `cowork` 命名空间用于会话管理和流式事件
 
 **渲染进程**（`src/renderer/`）
+
 - React 18 + Redux Toolkit + Tailwind CSS
 - 所有 UI 和业务逻辑
 - 仅通过 IPC 与主进程通信
@@ -199,24 +220,24 @@ src/main/
     ├── coworkRunner.ts         # Claude Agent SDK 执行引擎
     ├── coworkVmRunner.ts       # 沙箱 VM 模式
     ├── coworkMemoryExtractor.ts # 记忆提取
-    └── coworkMemoryJudge.ts    # 记忆验证
+    └── coworkMemoryJudge.ts     # 记忆验证
 
 src/renderer/
 ├── App.tsx              # 根组件
-├── types/cowork.ts      # 类型定义
+├── types/cowork.ts       # 类型定义
 ├── store/slices/
-│   ├── coworkSlice.ts   # 会话和流式状态
-│   └── artifactSlice.ts # Artifacts 状态
+│   ├── coworkSlice.ts    # 会话和流式状态
+│   └── artifactSlice.ts  # Artifacts 状态
 ├── services/
-│   ├── cowork.ts        # IPC 封装，Redux 集成
+│   ├── cowork.ts         # IPC 封装，Redux 集成
 │   ├── api.ts           # LLM API 与 SSE 流式
 │   └── artifactParser.ts # Artifact 检测与解析
 └── components/
-    ├── cowork/          # Cowork UI 组件
-    └── artifacts/       # Artifact 渲染器
+    ├── cowork/           # Cowork UI 组件
+    └── artifacts/        # Artifact 渲染器
 
-SKILLs/                  # 技能定义
-skills.config.json        # 技能启用/排序配置
+SKILLs/                   # 技能定义
+skills.config.json          # 技能启用/排序配置
 ```
 
 ### 数据存储
@@ -232,11 +253,13 @@ SQLite 数据库（`gearlai.sqlite`），位于用户数据目录。
 
 ## 安全模型
 
-- **进程隔离** — context isolation 启用，node integration 禁用
-- **权限门控** — 敏感工具调用需用户明确审批
-- **沙箱执行** — 可选隔离 VM 执行环境
-- **工作区边界** — 文件操作限制在指定目录内
-- **IPC 验证** — 所有跨进程调用经过类型检查
+| | |
+|---|---|
+| **进程隔离** | context isolation 启用，node integration 禁用 |
+| **权限门控** | 敏感工具调用需用户明确审批 |
+| **沙箱执行** | 可选隔离 VM 执行环境 |
+| **IPC 验证** | 所有跨进程调用经过类型检查 |
+| **工作区边界** | 文件操作限制在指定目录内 |
 
 ## 技术栈
 
