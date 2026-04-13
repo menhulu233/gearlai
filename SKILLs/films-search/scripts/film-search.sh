@@ -17,7 +17,7 @@ elif [ -n "${GEARLAI_ELECTRON_PATH:-}" ] && [ -x "${GEARLAI_ELECTRON_PATH}" ]; t
   NODE_BIN="$GEARLAI_ELECTRON_PATH"
   NODE_ENV_PREFIX=("ELECTRON_RUN_AS_NODE=1")
 else
-  echo '{"success":false,"error":"未找到 Node.js 运行时。请安装 Node.js 或确保 LobsterAI Electron 可用。"}' >&2
+  echo '{"success":false,"error":"未找到 Node.js 运行时。请安装 Node.js 或确保 GearlAI Electron 可用。"}' >&2
   exit 1
 fi
 

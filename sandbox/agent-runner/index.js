@@ -746,7 +746,7 @@ function isPathWritable(targetPath) {
   if (!targetPath || !path.isAbsolute(targetPath)) return false;
   const probePath = path.join(
     targetPath,
-    `.lobsterai-mount-probe-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`
+    `.gearlai-mount-probe-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`
   );
   try {
     fs.writeFileSync(probePath, 'ok');

@@ -17,7 +17,7 @@ const execFileAsync = promisify(execFile);
 // [1] Configuration
 // =============================================
 
-const CACHE_DIR = path.join(os.tmpdir(), 'lobsterai-film-cache');
+const CACHE_DIR = path.join(os.tmpdir(), 'gearlai-film-cache');
 
 const DEFAULT_CONFIG = {
   preferredPan: ['quark', 'aliyun', 'baidu', 'uc'],

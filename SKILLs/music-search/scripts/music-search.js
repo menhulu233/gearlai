@@ -17,7 +17,7 @@ const deepExtract = require('./shared/deep-extract');
 // [1] Configuration
 // =============================================
 
-const CACHE_DIR = path.join(os.tmpdir(), 'lobsterai-music-cache');
+const CACHE_DIR = path.join(os.tmpdir(), 'gearlai-music-cache');
 
 const DEFAULT_CONFIG = {
   preferredPan: ['quark', 'aliyun', 'baidu', 'uc'],
