@@ -185,5 +185,6 @@ export default {
   },
   plugins: [
     require('@tailwindcss/typography'),
+    require('./src/renderer/theme/tailwind/plugin.cjs'),
   ],
 }
