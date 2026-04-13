@@ -3,7 +3,7 @@
  * SQLite operations for IM configuration storage
  */
 
-import { Database } from 'sql.js';
+import Database from 'better-sqlite3';
 import {
   IMGatewayConfig,
   DingTalkConfig,
@@ -29,10 +29,10 @@ import {
 } from './types';
 
 export class IMStore {
-  private db: Database;
+  private db: Database.Database;
   private saveDb: () => void;
 
-  constructor(db: Database, saveDb: () => void) {
+  constructor(db: Database.Database, saveDb: () => void) {
     this.db = db;
     this.saveDb = saveDb;
     this.initializeTables();
@@ -40,7 +40,7 @@ export class IMStore {
   }
 
   private initializeTables() {
-    this.db.run(`
+    this.db.exec(`
       CREATE TABLE IF NOT EXISTS im_config (
         key TEXT PRIMARY KEY,
         value TEXT NOT NULL,
@@ -49,7 +49,7 @@ export class IMStore {
     `);
 
     // IM session mappings table for Cowork mode
-    this.db.run(`
+    this.db.exec(`
       CREATE TABLE IF NOT EXISTS im_session_mappings (
         im_conversation_id TEXT NOT NULL,
         platform TEXT NOT NULL,
@@ -71,18 +71,16 @@ export class IMStore {
     let changed = false;
 
     for (const platform of platforms) {
-      const result = this.db.exec('SELECT value FROM im_config WHERE key = ?', [platform]);
-      if (!result[0]?.values[0]) continue;
+      const stmt = this.db.prepare('SELECT value FROM im_config WHERE key = ?');
+      const row = stmt.get(platform) as { value: string } | undefined;
+      if (!row) continue;
 
       try {
-        const config = JSON.parse(result[0].values[0][0] as string);
+        const config = JSON.parse(row.value);
         if (config.debug === undefined || config.debug === false) {
           config.debug = true;
           const now = Date.now();
-          this.db.run(
-            'UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?',
-            [JSON.stringify(config), now, platform]
-          );
+          this.db.prepare('UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?').run(JSON.stringify(config), now, platform);
           changed = true;
         }
       } catch {
@@ -90,19 +88,17 @@ export class IMStore {
       }
     }
 
-    const settingsResult = this.db.exec('SELECT value FROM im_config WHERE key = ?', ['settings']);
-    if (settingsResult[0]?.values[0]) {
+    const settingsStmt = this.db.prepare('SELECT value FROM im_config WHERE key = ?');
+    const settingsRow = settingsStmt.get('settings') as { value: string } | undefined;
+    if (settingsRow) {
       try {
-        const settings = JSON.parse(settingsResult[0].values[0][0] as string) as Partial<IMSettings>;
+        const settings = JSON.parse(settingsRow.value) as Partial<IMSettings>;
         // Keep IM and desktop behavior aligned: skills auto-routing should be on by default.
         // Historical renderer default could persist `skillsEnabled: false` unintentionally.
         if (settings.skillsEnabled !== true) {
           settings.skillsEnabled = true;
           const now = Date.now();
-          this.db.run(
-            'UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?',
-            [JSON.stringify(settings), now, 'settings']
-          );
+          this.db.prepare('UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?').run(JSON.stringify(settings), now, 'settings');
           changed = true;
         }
       } catch {
@@ -111,17 +107,15 @@ export class IMStore {
     }
 
     // Migrate feishu renderMode from 'text' to 'card' (previous renderer default was incorrect)
-    const feishuResult = this.db.exec('SELECT value FROM im_config WHERE key = ?', ['feishu']);
-    if (feishuResult[0]?.values[0]) {
+    const feishuStmt = this.db.prepare('SELECT value FROM im_config WHERE key = ?');
+    const feishuRow = feishuStmt.get('feishu') as { value: string } | undefined;
+    if (feishuRow) {
       try {
-        const feishuConfig = JSON.parse(feishuResult[0].values[0][0] as string) as Partial<FeishuConfig>;
+        const feishuConfig = JSON.parse(feishuRow.value) as Partial<FeishuConfig>;
         if (feishuConfig.renderMode === 'text') {
           feishuConfig.renderMode = 'card';
           const now = Date.now();
-          this.db.run(
-            'UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?',
-            [JSON.stringify(feishuConfig), now, 'feishu']
-          );
+          this.db.prepare('UPDATE im_config SET value = ?, updated_at = ? WHERE key = ?').run(JSON.stringify(feishuConfig), now, 'feishu');
           changed = true;
         }
       } catch {
@@ -137,11 +131,11 @@ export class IMStore {
   // ==================== Generic Config Operations ====================
 
   private getConfigValue<T>(key: string): T | undefined {
-    const result = this.db.exec('SELECT value FROM im_config WHERE key = ?', [key]);
-    if (!result[0]?.values[0]) return undefined;
-    const value = result[0].values[0][0] as string;
+    const stmt = this.db.prepare('SELECT value FROM im_config WHERE key = ?');
+    const row = stmt.get(key) as { value: string } | undefined;
+    if (!row) return undefined;
     try {
-      return JSON.parse(value) as T;
+      return JSON.parse(row.value) as T;
     } catch (error) {
       console.warn(`Failed to parse im_config value for ${key}`, error);
       return undefined;
@@ -150,13 +144,13 @@ export class IMStore {
 
   private setConfigValue<T>(key: string, value: T): void {
     const now = Date.now();
-    this.db.run(`
+    this.db.prepare(`
       INSERT INTO im_config (key, value, updated_at)
       VALUES (?, ?, ?)
       ON CONFLICT(key) DO UPDATE SET
         value = excluded.value,
         updated_at = excluded.updated_at
-    `, [key, JSON.stringify(value), now]);
+    `).run(key, JSON.stringify(value), now);
     this.saveDb();
   }
 
@@ -341,7 +335,7 @@ export class IMStore {
    * Clear all IM configuration
    */
   clearConfig(): void {
-    this.db.run('DELETE FROM im_config');
+    this.db.exec('DELETE FROM im_config');
     this.saveDb();
   }
 
@@ -383,18 +377,17 @@ export class IMStore {
    * Get session mapping by IM conversation ID and platform
    */
   getSessionMapping(imConversationId: string, platform: IMPlatform): IMSessionMapping | null {
-    const result = this.db.exec(
-      'SELECT im_conversation_id, platform, cowork_session_id, created_at, last_active_at FROM im_session_mappings WHERE im_conversation_id = ? AND platform = ?',
-      [imConversationId, platform]
+    const stmt = this.db.prepare(
+      'SELECT im_conversation_id, platform, cowork_session_id, created_at, last_active_at FROM im_session_mappings WHERE im_conversation_id = ? AND platform = ?'
     );
-    if (!result[0]?.values[0]) return null;
-    const row = result[0].values[0];
+    const row = stmt.get(imConversationId, platform) as { im_conversation_id: string; platform: string; cowork_session_id: string; created_at: number; last_active_at: number } | undefined;
+    if (!row) return null;
     return {
-      imConversationId: row[0] as string,
-      platform: row[1] as IMPlatform,
-      coworkSessionId: row[2] as string,
-      createdAt: row[3] as number,
-      lastActiveAt: row[4] as number,
+      imConversationId: row.im_conversation_id,
+      platform: row.platform as IMPlatform,
+      coworkSessionId: row.cowork_session_id,
+      createdAt: row.created_at,
+      lastActiveAt: row.last_active_at,
     };
   }
 
@@ -403,10 +396,9 @@ export class IMStore {
    */
   createSessionMapping(imConversationId: string, platform: IMPlatform, coworkSessionId: string): IMSessionMapping {
     const now = Date.now();
-    this.db.run(
-      'INSERT INTO im_session_mappings (im_conversation_id, platform, cowork_session_id, created_at, last_active_at) VALUES (?, ?, ?, ?, ?)',
-      [imConversationId, platform, coworkSessionId, now, now]
-    );
+    this.db.prepare(
+      'INSERT INTO im_session_mappings (im_conversation_id, platform, cowork_session_id, created_at, last_active_at) VALUES (?, ?, ?, ?, ?)'
+    ).run(imConversationId, platform, coworkSessionId, now, now);
     this.saveDb();
     return {
       imConversationId,
@@ -422,10 +414,9 @@ export class IMStore {
    */
   updateSessionLastActive(imConversationId: string, platform: IMPlatform): void {
     const now = Date.now();
-    this.db.run(
-      'UPDATE im_session_mappings SET last_active_at = ? WHERE im_conversation_id = ? AND platform = ?',
-      [now, imConversationId, platform]
-    );
+    this.db.prepare(
+      'UPDATE im_session_mappings SET last_active_at = ? WHERE im_conversation_id = ? AND platform = ?'
+    ).run(now, imConversationId, platform);
     this.saveDb();
   }
 
@@ -433,10 +424,9 @@ export class IMStore {
    * Delete a session mapping
    */
   deleteSessionMapping(imConversationId: string, platform: IMPlatform): void {
-    this.db.run(
-      'DELETE FROM im_session_mappings WHERE im_conversation_id = ? AND platform = ?',
-      [imConversationId, platform]
-    );
+    this.db.prepare(
+      'DELETE FROM im_session_mappings WHERE im_conversation_id = ? AND platform = ?'
+    ).run(imConversationId, platform);
     this.saveDb();
   }
 
@@ -447,15 +437,14 @@ export class IMStore {
     const query = platform
       ? 'SELECT im_conversation_id, platform, cowork_session_id, created_at, last_active_at FROM im_session_mappings WHERE platform = ? ORDER BY last_active_at DESC'
       : 'SELECT im_conversation_id, platform, cowork_session_id, created_at, last_active_at FROM im_session_mappings ORDER BY last_active_at DESC';
-    const params = platform ? [platform] : [];
-    const result = this.db.exec(query, params);
-    if (!result[0]?.values) return [];
-    return result[0].values.map(row => ({
-      imConversationId: row[0] as string,
-      platform: row[1] as IMPlatform,
-      coworkSessionId: row[2] as string,
-      createdAt: row[3] as number,
-      lastActiveAt: row[4] as number,
+    const stmt = this.db.prepare(query);
+    const rows = platform ? stmt.all(platform) : stmt.all();
+    return rows.map((row: { im_conversation_id: string; platform: string; cowork_session_id: string; created_at: number; last_active_at: number }) => ({
+      imConversationId: row.im_conversation_id,
+      platform: row.platform as IMPlatform,
+      coworkSessionId: row.cowork_session_id,
+      createdAt: row.created_at,
+      lastActiveAt: row.last_active_at,
     }));
   }
 }

@@ -29,7 +29,7 @@ import {
   IMConnectivityTestResult,
   IMConnectivityVerdict,
 } from './types';
-import type { Database } from 'sql.js';
+import Database = require('better-sqlite3');
 import type { CoworkRunner } from '../libs/coworkRunner';
 import type { CoworkStore } from '../coworkStore';
 const CONNECTIVITY_TIMEOUT_MS = 10_000;
@@ -75,7 +75,7 @@ export class IMGatewayManager extends EventEmitter {
   // NIM probe mutex: serializes concurrent connectivity tests
   private nimProbePromise: Promise<void> | null = null;
 
-  constructor(db: Database, saveDb: () => void, options?: IMGatewayManagerOptions) {
+  constructor(db: Database.Database, saveDb: () => void, options?: IMGatewayManagerOptions) {
     super();
 
     this.imStore = new IMStore(db, saveDb);

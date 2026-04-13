@@ -1,4 +1,4 @@
-import { Database } from 'sql.js';
+import Database from 'better-sqlite3';
 import { v4 as uuidv4 } from 'uuid';
 import { CronExpressionParser } from 'cron-parser';
 
@@ -105,40 +105,19 @@ interface RunRow {
 }
 
 export class ScheduledTaskStore {
-  private db: Database;
-  private saveDb: () => void;
+  private db: Database.Database;
 
-  constructor(db: Database, saveDb: () => void) {
+  constructor(db: Database.Database) {
     this.db = db;
-    this.saveDb = saveDb;
     this.resetStuckRunningTasks();
   }
 
-  // Helper method to get a single row from query result
   private getOne<T>(sql: string, params: (string | number | null)[] = []): T | undefined {
-    const result = this.db.exec(sql, params);
-    if (!result[0]?.values[0]) return undefined;
-    const columns = result[0].columns;
-    const values = result[0].values[0];
-    const row: Record<string, unknown> = {};
-    columns.forEach((col, i) => {
-      row[col] = values[i];
-    });
-    return row as T;
+    return this.db.prepare(sql).get(...params) as T | undefined;
   }
 
-  // Helper method to get all rows from query result
   private getAll<T>(sql: string, params: (string | number | null)[] = []): T[] {
-    const result = this.db.exec(sql, params);
-    if (!result[0]?.values) return [];
-    const columns = result[0].columns;
-    return result[0].values.map((values) => {
-      const row: Record<string, unknown> = {};
-      columns.forEach((col, i) => {
-        row[col] = values[i];
-      });
-      return row as T;
-    });
+    return this.db.prepare(sql).all(...params) as T[];
   }
 
   // --- Startup ---
@@ -146,24 +125,30 @@ export class ScheduledTaskStore {
   private resetStuckRunningTasks(): void {
     try {
       // Reset stuck runs
-      this.db.run(`
+      this.db
+        .prepare(
+          `
         UPDATE scheduled_task_runs
         SET status = 'error',
             finished_at = ?,
             error = 'Application was closed during execution'
         WHERE status = 'running'
-      `, [new Date().toISOString()]);
+      `,
+        )
+        .run(new Date().toISOString());
 
       // Reset stuck task states
-      this.db.run(`
+      this.db
+        .prepare(
+          `
         UPDATE scheduled_tasks
         SET running_at_ms = NULL,
             last_status = 'error',
             last_error = 'Application was closed during execution'
         WHERE running_at_ms IS NOT NULL
-      `);
-
-      this.saveDb();
+      `,
+        )
+        .run();
     } catch (error) {
       console.warn('Failed to reset stuck running tasks:', error);
     }
@@ -172,17 +157,12 @@ export class ScheduledTaskStore {
   // --- Task CRUD ---
 
   listTasks(): ScheduledTask[] {
-    const rows = this.getAll<TaskRow>(
-      'SELECT * FROM scheduled_tasks ORDER BY created_at DESC'
-    );
+    const rows = this.getAll<TaskRow>('SELECT * FROM scheduled_tasks ORDER BY created_at DESC');
     return rows.map((row) => this.rowToTask(row));
   }
 
   getTask(id: string): ScheduledTask | null {
-    const row = this.getOne<TaskRow>(
-      'SELECT * FROM scheduled_tasks WHERE id = ?',
-      [id]
-    );
+    const row = this.getOne<TaskRow>('SELECT * FROM scheduled_tasks WHERE id = ?', [id]);
     return row ? this.rowToTask(row) : null;
   }
 
@@ -191,25 +171,33 @@ export class ScheduledTaskStore {
     const now = new Date().toISOString();
     const nextRunAtMs = input.enabled ? this.calculateNextRunTime(input.schedule, null) : null;
 
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       INSERT INTO scheduled_tasks
         (id, name, description, enabled, schedule_json, prompt,
          working_directory, system_prompt, execution_mode, expires_at,
          notify_platforms_json, next_run_at_ms, consecutive_errors, created_at, updated_at)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?)
-    `, [
-      id, input.name, input.description,
-      input.enabled ? 1 : 0,
-      JSON.stringify(input.schedule),
-      input.prompt,
-      input.workingDirectory, input.systemPrompt, input.executionMode,
-      input.expiresAt ?? null,
-      JSON.stringify(input.notifyPlatforms ?? []),
-      nextRunAtMs,
-      now, now,
-    ]);
+    `,
+      )
+      .run(
+        id,
+        input.name,
+        input.description,
+        input.enabled ? 1 : 0,
+        JSON.stringify(input.schedule),
+        input.prompt,
+        input.workingDirectory,
+        input.systemPrompt,
+        input.executionMode,
+        input.expiresAt ?? null,
+        JSON.stringify(input.notifyPlatforms ?? []),
+        nextRunAtMs,
+        now,
+        now,
+      );
 
-    this.saveDb();
     return this.getTask(id)!;
   }
 
@@ -237,33 +225,40 @@ export class ScheduledTaskStore {
         : null;
     }
 
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       UPDATE scheduled_tasks
       SET name = ?, description = ?, enabled = ?, schedule_json = ?,
           prompt = ?, working_directory = ?, system_prompt = ?,
           execution_mode = ?, expires_at = ?, notify_platforms_json = ?,
           next_run_at_ms = ?, updated_at = ?
       WHERE id = ?
-    `, [
-      name, description,
-      enabled ? 1 : 0,
-      JSON.stringify(schedule),
-      prompt, workingDirectory,
-      systemPrompt, executionMode,
-      expiresAt,
-      JSON.stringify(notifyPlatforms),
-      nextRunAtMs, now, id,
-    ]);
+    `,
+      )
+      .run(
+        name,
+        description,
+        enabled ? 1 : 0,
+        JSON.stringify(schedule),
+        prompt,
+        workingDirectory,
+        systemPrompt,
+        executionMode,
+        expiresAt,
+        JSON.stringify(notifyPlatforms),
+        nextRunAtMs,
+        now,
+        id,
+      );
 
-    this.saveDb();
     return this.getTask(id)!;
   }
 
   deleteTask(id: string): boolean {
     // Delete runs first (CASCADE may not work with sql.js)
-    this.db.run('DELETE FROM scheduled_task_runs WHERE task_id = ?', [id]);
-    this.db.run('DELETE FROM scheduled_tasks WHERE id = ?', [id]);
-    this.saveDb();
+    this.db.prepare('DELETE FROM scheduled_task_runs WHERE task_id = ?').run(id);
+    this.db.prepare('DELETE FROM scheduled_tasks WHERE id = ?').run(id);
     return true;
   }
 
@@ -302,12 +297,15 @@ export class ScheduledTaskStore {
   // --- Task State Updates (called by Scheduler) ---
 
   markTaskRunning(id: string, runningAtMs: number): void {
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       UPDATE scheduled_tasks
       SET running_at_ms = ?, last_status = 'running', updated_at = ?
       WHERE id = ?
-    `, [runningAtMs, new Date().toISOString(), id]);
-    this.saveDb();
+    `,
+      )
+      .run(runningAtMs, new Date().toISOString(), id);
   }
 
   markTaskCompleted(
@@ -315,14 +313,16 @@ export class ScheduledTaskStore {
     success: boolean,
     durationMs: number,
     error: string | null,
-    schedule: Schedule
+    schedule: Schedule,
   ): void {
     const now = Date.now();
     const task = this.getTask(id);
     const consecutiveErrors = success ? 0 : (task?.state.consecutiveErrors ?? 0) + 1;
     const nextRunAtMs = task?.enabled ? this.calculateNextRunTime(schedule, now) : null;
 
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       UPDATE scheduled_tasks
       SET running_at_ms = NULL,
           last_run_at_ms = ?,
@@ -333,18 +333,18 @@ export class ScheduledTaskStore {
           next_run_at_ms = ?,
           updated_at = ?
       WHERE id = ?
-    `, [
-      now,
-      success ? 'success' : 'error',
-      error,
-      durationMs,
-      consecutiveErrors,
-      nextRunAtMs,
-      new Date().toISOString(),
-      id,
-    ]);
-
-    this.saveDb();
+    `,
+      )
+      .run(
+        now,
+        success ? 'success' : 'error',
+        error,
+        durationMs,
+        consecutiveErrors,
+        nextRunAtMs,
+        new Date().toISOString(),
+        id,
+      );
   }
 
   // --- Run History ---
@@ -352,11 +352,14 @@ export class ScheduledTaskStore {
   createRun(taskId: string, trigger: 'scheduled' | 'manual'): ScheduledTaskRun {
     const id = uuidv4();
     const now = new Date().toISOString();
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       INSERT INTO scheduled_task_runs (id, task_id, status, started_at, trigger_type)
       VALUES (?, ?, 'running', ?, ?)
-    `, [id, taskId, now, trigger]);
-    this.saveDb();
+    `,
+      )
+      .run(id, taskId, now, trigger);
     return this.getRun(id)!;
   }
 
@@ -365,30 +368,30 @@ export class ScheduledTaskStore {
     status: 'success' | 'error',
     sessionId: string | null,
     durationMs: number,
-    error: string | null
+    error: string | null,
   ): ScheduledTaskRun | null {
     const now = new Date().toISOString();
-    this.db.run(`
+    this.db
+      .prepare(
+        `
       UPDATE scheduled_task_runs
       SET status = ?, session_id = ?, finished_at = ?, duration_ms = ?, error = ?
       WHERE id = ?
-    `, [status, sessionId, now, durationMs, error, runId]);
-    this.saveDb();
+    `,
+      )
+      .run(status, sessionId, now, durationMs, error, runId);
     return this.getRun(runId);
   }
 
   getRun(id: string): ScheduledTaskRun | null {
-    const row = this.getOne<RunRow>(
-      'SELECT * FROM scheduled_task_runs WHERE id = ?',
-      [id]
-    );
+    const row = this.getOne<RunRow>('SELECT * FROM scheduled_task_runs WHERE id = ?', [id]);
     return row ? this.rowToRun(row) : null;
   }
 
   listRuns(taskId: string, limit: number = 50, offset: number = 0): ScheduledTaskRun[] {
     const rows = this.getAll<RunRow>(
       'SELECT * FROM scheduled_task_runs WHERE task_id = ? ORDER BY started_at DESC LIMIT ? OFFSET ?',
-      [taskId, limit, offset]
+      [taskId, limit, offset],
     );
     return rows.map((row) => this.rowToRun(row));
   }
@@ -400,7 +403,7 @@ export class ScheduledTaskStore {
        LEFT JOIN scheduled_tasks t ON r.task_id = t.id
        ORDER BY r.started_at DESC
        LIMIT ? OFFSET ?`,
-      [limit, offset]
+      [limit, offset],
     );
     return rows.map((row) => ({
       ...this.rowToRun(row),
@@ -411,7 +414,7 @@ export class ScheduledTaskStore {
   countRuns(taskId: string): number {
     const row = this.getOne<{ 'COUNT(*)': number }>(
       'SELECT COUNT(*) FROM scheduled_task_runs WHERE task_id = ?',
-      [taskId]
+      [taskId],
     );
     return row?.['COUNT(*)'] ?? 0;
   }
@@ -420,7 +423,7 @@ export class ScheduledTaskStore {
     // Get IDs of the runs to keep
     const keepRows = this.getAll<{ id: string }>(
       'SELECT id FROM scheduled_task_runs WHERE task_id = ? ORDER BY started_at DESC LIMIT ?',
-      [taskId, keepCount]
+      [taskId, keepCount],
     );
     const keepIds = keepRows.map((r) => r.id);
 
@@ -428,18 +431,19 @@ export class ScheduledTaskStore {
 
     // Delete all runs not in the keep list
     const placeholders = keepIds.map(() => '?').join(',');
-    this.db.run(
-      `DELETE FROM scheduled_task_runs WHERE task_id = ? AND id NOT IN (${placeholders})`,
-      [taskId, ...keepIds]
-    );
-    this.saveDb();
+    this.db
+      .prepare(
+        `DELETE FROM scheduled_task_runs WHERE task_id = ? AND id NOT IN (${placeholders})`,
+      )
+      .run(taskId, ...keepIds);
   }
 
   // --- Scheduler Queries ---
 
   getDueTasks(nowMs: number): ScheduledTask[] {
     const todayStr = new Date(nowMs).toISOString().slice(0, 10);
-    const rows = this.getAll<TaskRow>(`
+    const rows = this.getAll<TaskRow>(
+      `
       SELECT * FROM scheduled_tasks
       WHERE enabled = 1
         AND next_run_at_ms IS NOT NULL
@@ -447,7 +451,9 @@ export class ScheduledTaskStore {
         AND running_at_ms IS NULL
         AND (expires_at IS NULL OR expires_at > ?)
       ORDER BY next_run_at_ms ASC
-    `, [nowMs, todayStr]);
+    `,
+      [nowMs, todayStr],
+    );
     return rows.map((row) => this.rowToTask(row));
   }
 
@@ -460,7 +466,7 @@ export class ScheduledTaskStore {
          AND next_run_at_ms IS NOT NULL
          AND running_at_ms IS NULL
          AND (expires_at IS NULL OR expires_at > ?)`,
-      [todayStr]
+      [todayStr],
     );
     return row?.min_time ?? null;
   }

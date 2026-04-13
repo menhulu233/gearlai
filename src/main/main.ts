@@ -508,21 +508,12 @@ let mcpStore: McpStore | null = null;
 let imGatewayManager: IMGatewayManager | null = null;
 let scheduledTaskStore: ScheduledTaskStore | null = null;
 let scheduler: Scheduler | null = null;
-let storeInitPromise: Promise<SqliteStore> | null = null;
 
-const initStore = async (): Promise<SqliteStore> => {
-  if (!storeInitPromise) {
-    if (!app.isReady()) {
-      throw new Error('Store accessed before app is ready.');
-    }
-    storeInitPromise = Promise.race([
-      SqliteStore.create(app.getPath('userData')),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('Store initialization timed out after 15s')), 15_000)
-      ),
-    ]);
+const initStore = (): SqliteStore => {
+  if (!app.isReady()) {
+    throw new Error('Store accessed before app is ready.');
   }
-  return storeInitPromise;
+  return SqliteStore.create(app.getPath('userData'));
 };
 
 const getStore = (): SqliteStore => {
@@ -535,7 +526,7 @@ const getStore = (): SqliteStore => {
 const getCoworkStore = () => {
   if (!coworkStore) {
     const sqliteStore = getStore();
-    coworkStore = new CoworkStore(sqliteStore.getDatabase(), sqliteStore.getSaveFunction());
+    coworkStore = new CoworkStore(sqliteStore.getDatabase());
     const cleaned = coworkStore.autoDeleteNonPersonalMemories();
     if (cleaned > 0) {
       console.info(`[cowork-memory] Auto-deleted ${cleaned} non-personal/procedural memories`);
@@ -654,7 +645,7 @@ const getSkillManager = () => {
 const getMcpStore = () => {
   if (!mcpStore) {
     const sqliteStore = getStore();
-    mcpStore = new McpStore(sqliteStore.getDatabase(), sqliteStore.getSaveFunction());
+    mcpStore = new McpStore(sqliteStore.getDatabase());
   }
   return mcpStore;
 };
@@ -741,7 +732,7 @@ const getIMGatewayManager = () => {
 const getScheduledTaskStore = () => {
   if (!scheduledTaskStore) {
     const sqliteStore = getStore();
-    scheduledTaskStore = new ScheduledTaskStore(sqliteStore.getDatabase(), sqliteStore.getSaveFunction());
+    scheduledTaskStore = new ScheduledTaskStore(sqliteStore.getDatabase());
   }
   return scheduledTaskStore;
 };
