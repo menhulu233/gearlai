@@ -104,7 +104,7 @@ function getSdkDataPath(account: string): string {
   try {
     baseDir = app.getPath('userData');
   } catch {
-    baseDir = path.join(os.homedir(), '.lobsterai');
+    baseDir = path.join(os.homedir(), '.gearlai');
   }
   const dataDir = path.join(baseDir, 'nim-data', account);
   if (!fs.existsSync(dataDir)) {

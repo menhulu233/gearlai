@@ -1,11 +1,11 @@
 # lobster-cowork-pure
 
 <p align="center">
-  <img src="public/logo.png" alt="LobsterAI" width="120">
+  <img src="public/logo.png" alt="GearlAI" width="120">
 </p>
 
 <p align="center">
-  <strong>基于 LobsterAI 的桌面级 AI 协作应用，仅保留 Cowork 核心功能</strong>
+  <strong>基于 GearlAI 的桌面级 AI 协作应用，仅保留 Cowork 核心功能</strong>
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@
 
 ---
 
-**lobster-cowork-pure** 是 [LobsterAI](https://github.com/netease-youdao/LobsterAI) 的桌面端分支，专注于维护其核心功能 —— **Cowork 模式**。
+**lobster-cowork-pure** 是 [GearlAI](https://github.com/netease-youdao/GearlAI) 的桌面端分支，专注于维护其核心功能 —— **Cowork 模式**。
 
 Cowork 模式基于 Claude Agent SDK，能够在本地或沙箱环境中执行工具、操作文件、运行命令，所有敏感操作均需用户审批，全程在你的监督下完成。
 
@@ -203,7 +203,7 @@ Artifacts 提供代码输出的富文本预览：
 
 ## 数据存储
 
-所有数据存储在本地 SQLite 数据库（`lobsterai.sqlite`，位于用户数据目录）。
+所有数据存储在本地 SQLite 数据库（`gearlai.sqlite`，位于用户数据目录）。
 
 | 表 | 用途 |
 |----|------|
