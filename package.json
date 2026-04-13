@@ -32,7 +32,7 @@
     "dist:mac:x64": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --x64",
     "dist:mac:arm64": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --arm64",
     "dist:mac:universal": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --mac --universal",
-    "dist:win": "npm run setup:mingit && npm run setup:python-runtime && npm run build && npm run compile:electron && npm run build:skills && electron-builder --win --x64",
+    "dist:win": "npm run setup:mingit && npm run setup:python-runtime && npm run prebuild:electron && npm run build && npm run compile:electron && npm run build:skills && electron-builder --win --x64",
     "dist:linux": "npm run build && npm run compile:electron && npm run build:skills && electron-builder --linux",
     "sandbox:image:mac": "bash scripts/build-sandbox-image-mac.sh",
     "sandbox:image:win:mac": "bash scripts/build-sandbox-image-win-on-mac.sh",
@@ -41,6 +41,7 @@
     "generate:tray-icons": "node scripts/generate-tray-icons.js",
     "setup:mingit": "node scripts/setup-mingit.js",
     "setup:python-runtime": "node scripts/setup-python-runtime.js",
+    "prebuild:electron": "node scripts/download-uv-runtime.cjs",
     "regenerate:icon": "bash scripts/regenerate-mac-icon.sh",
     "fix:mac-icon": "bash scripts/fix-mac-icon-display.sh"
   },

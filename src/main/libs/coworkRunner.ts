@@ -13,6 +13,7 @@ import { loadClaudeSdk } from './claudeSdk';
 import { getElectronNodeRuntimePath, getEnhancedEnv, getEnhancedEnvWithTmpdir, getSkillsRoot } from './coworkUtil';
 import { coworkLog, getCoworkLogPath } from './coworkLogger';
 import { ensurePythonPipReady, ensurePythonRuntimeReady } from './pythonRuntime';
+import { appendUvRuntimeToEnv, ensureUvRuntimeReady } from './uvRuntime';
 import { cpRecursiveSync } from '../fsCompat';
 import { isQuestionLikeMemoryText, type CoworkMemoryGuardLevel } from './coworkMemoryExtractor';
 import { z } from 'zod';
@@ -3313,6 +3314,22 @@ export class CoworkRunner extends EventEmitter {
                       stdioEnv = withElectronNodeEnv(stdioEnv);
                       shouldInjectWindowsHideRequire = true;
                       coworkLog('INFO', 'runClaudeCodeLocal', `MCP "${serverKey}": rewrote stdio command "${stdioCommand}" to Electron runtime + npm-cli.js`);
+                    } else if (
+                      (normalizedCommand === 'uvx' || normalizedCommand === 'uvx.cmd' || normalizedCommand.endsWith('\\uvx.cmd') || normalizedCommand.endsWith('/uvx.cmd'))
+                    ) {
+                      // Ensure bundled uv runtime is available, then use it directly
+                      await ensureUvRuntimeReady();
+                      const { getUserUvRoot } = await import('./uvRuntime');
+                      const userUvRoot = getUserUvRoot();
+                      const uvxExe = path.join(userUvRoot, 'uvx.exe');
+                      if (fs.existsSync(uvxExe)) {
+                        effectiveStdioCommand = uvxExe;
+                        // Apply env so uv can find the bundled Python and its own binaries
+                        stdioEnv = appendUvRuntimeToEnv(stdioEnv || {});
+                        coworkLog('INFO', 'runClaudeCodeLocal', `MCP "${serverKey}": rewrote stdio command "${stdioCommand}" to bundled uvx`);
+                      } else {
+                        coworkLog('WARN', 'runClaudeCodeLocal', `MCP "${serverKey}": uvx.exe not found at ${uvxExe}, leaving command unchanged`);
+                      }
                     }
                   }
 

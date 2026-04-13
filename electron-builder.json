@@ -80,6 +80,13 @@
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "resources/uv-runtime",
+        "to": "uv-runtime",
+        "filter": [
+          "**/*"
+        ]
       }
     ]
   },
