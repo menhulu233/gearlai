@@ -1,5 +1,7 @@
 <div align="center">
 
+![Logo](resources/tray/tray-icon.png)
+
 # Gearl
 
 **鉴玄** — A desktop AI Agent platform powered by Claude, built with Electron.
