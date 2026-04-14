@@ -28,7 +28,7 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
 
   if (runs.length === 0) {
     return (
-      <div className="text-center py-6 text-sm dark:text-claude-darkTextSecondary text-claude-textSecondary">
+      <div className="text-center py-6 text-sm text-secondary">
         {i18nService.t('scheduledTasksNoRuns')}
       </div>
     );
@@ -36,7 +36,7 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
 
   return (
     <div>
-      <div className="divide-y dark:divide-claude-darkBorder/50 divide-claude-border/50">
+      <div className="divide-y divide-border/50">
         {runs.map((run) => {
           const statusInfo = statusIcons[run.status] || { icon: '?', color: '' };
           return (
@@ -44,10 +44,10 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
               <div className="flex items-center gap-3 min-w-0">
                 <span className={`text-sm font-bold ${statusInfo.color}`}>{statusInfo.icon}</span>
                 <div className="min-w-0">
-                  <span className="text-sm dark:text-claude-darkText text-claude-text">
+                  <span className="text-sm text-foreground">
                     {new Date(run.startedAt).toLocaleString()}
                   </span>
-                  <span className="ml-2 text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary">
+                  <span className="ml-2 text-xs text-secondary">
                     {run.trigger === 'manual'
                       ? i18nService.t('scheduledTasksManual')
                       : i18nService.t('scheduledTasksScheduled')}
@@ -56,7 +56,7 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
               </div>
               <div className="flex items-center gap-3 shrink-0 ml-2">
                 {run.durationMs !== null && (
-                  <span className="text-xs dark:text-claude-darkTextSecondary text-claude-textSecondary">
+                  <span className="text-xs text-secondary">
                     {formatDuration(run.durationMs)}
                   </span>
                 )}
@@ -77,7 +77,7 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
                         detail: { sessionId: run.sessionId },
                       }));
                     }}
-                    className="text-xs text-claude-accent hover:text-claude-accentHover transition-colors"
+                    className="text-xs text-primary hover:text-primary-hover transition-colors"
                   >
                     {i18nService.t('scheduledTasksViewSession')}
                   </button>
@@ -91,7 +91,7 @@ const TaskRunHistory: React.FC<TaskRunHistoryProps> = ({ taskId, runs }) => {
         <button
           type="button"
           onClick={handleLoadMore}
-          className="w-full py-2 mt-2 text-sm text-claude-accent hover:text-claude-accentHover transition-colors"
+          className="w-full py-2 mt-2 text-sm text-primary hover:text-primary-hover transition-colors"
         >
           {i18nService.t('scheduledTasksLoadMore')}
         </button>

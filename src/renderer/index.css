@@ -22,7 +22,7 @@
 
 /* Improve code block styles */
 pre {
-  @apply dark:bg-claude-darkSurface bg-claude-surfaceHover;
+  @apply dark:bg-surface bg-surface-raised;
   border-radius: 0.75rem !important;
   padding: 1em !important;
   margin: 1em 0 !important;
@@ -41,18 +41,18 @@ table {
 }
 
 th, td {
-  @apply dark:border-claude-darkBorder border-claude-border;
+  @apply dark:border-border border-border;
   padding: 0.5em;
 }
 
 th {
-  @apply dark:bg-claude-darkSurface/50 bg-claude-surfaceHover/50;
+  background-color: var(--gearl-surface, #FFFFFF);
   font-weight: bold;
 }
 
 /* Style for blockquotes */
 blockquote {
-  @apply dark:border-claude-accent border-claude-accent dark:text-claude-darkTextSecondary text-claude-textSecondary;
+  @apply dark:border-primary border-primary dark:text-secondary text-secondary;
   border-left-width: 3px;
   padding-left: 1em;
   font-style: italic;
@@ -124,12 +124,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply dark:bg-claude-darkBorder bg-claude-border;
+  @apply dark:bg-border bg-border;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply dark:bg-claude-darkTextSecondary bg-claude-textSecondary;
+  @apply dark:bg-secondary bg-secondary;
 }
 
 /* Style for select options to match theme */
@@ -174,16 +174,16 @@ select::-ms-expand {
 
 /* Focus ring */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-claude-accent focus:ring-offset-2 dark:focus:ring-offset-claude-darkBg focus:ring-offset-claude-bg;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background focus:ring-offset-background;
 }
 
 /* Button styles */
 .btn-primary {
-  @apply bg-claude-accent hover:bg-claude-accentHover text-white font-medium py-2 px-4 rounded-lg transition-colors;
+  @apply bg-primary hover:bg-primary-hover text-primary-foreground font-medium py-2 px-4 rounded-lg transition-colors;
 }
 
 .btn-secondary {
-  @apply dark:bg-claude-darkSurface bg-claude-surface dark:hover:bg-claude-darkSurfaceHover hover:bg-claude-surfaceHover dark:text-claude-darkText text-claude-text border dark:border-claude-darkBorder border-claude-border font-medium py-2 px-4 rounded-lg transition-colors;
+  @apply dark:bg-surface bg-surface dark:hover:bg-surface-raised hover:bg-surface-raised dark:text-foreground text-foreground border dark:border-border border-border font-medium py-2 px-4 rounded-lg transition-colors;
 }
 
 /* Sidebar width transition - instant toggle, no animation */
@@ -193,7 +193,7 @@ select::-ms-expand {
 
 /* Subtle separator line */
 .separator {
-  @apply dark:border-claude-darkBorderLight border-claude-borderLight;
+  @apply dark:border-border border-border;
   border-top-width: 1px;
 }
 
@@ -215,7 +215,7 @@ select::-ms-expand {
 
 /* Skeleton loading */
 .skeleton {
-  @apply dark:bg-claude-darkSurface bg-claude-surfaceHover rounded;
+  @apply dark:bg-surface bg-surface-raised rounded;
   position: relative;
   overflow: hidden;
 }
