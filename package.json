@@ -6,7 +6,7 @@
     "email": "gearl.project@gearlai.com"
   },
   "license": "MIT",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "main": "dist-electron/main.js",
   "engines": {
     "node": ">=24 <25"
