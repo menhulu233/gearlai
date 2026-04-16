@@ -48,9 +48,7 @@
     "category": "public.app-category.productivity",
     "hardenedRuntime": true,
     "gatekeeperAssess": false,
-    "x64ArchFiles": {
-      "SKILLs/pptx/node_modules/@img/sharp-darwin-arm64/lib/sharp-darwin-arm64.node": true
-    },
+    "x64ArchFiles": "SKILLs/pptx/node_modules/@img/**/*",
     "entitlements": "build/entitlements.mac.plist",
     "entitlementsInherit": "build/entitlements.mac.plist",
     "extendInfo": {
