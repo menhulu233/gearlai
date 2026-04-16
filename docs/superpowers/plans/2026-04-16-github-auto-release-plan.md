@@ -29,6 +29,8 @@
 
 - [ ] **Step 1: 创建 workflow 文件**
 
+三个平台分别构建，最后由 ubuntu job 汇总上传（节省 quota）：
+
 ```yaml
 name: Release
 
@@ -38,8 +40,23 @@ on:
       - 'v*.*.*'
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            build_cmd: pnpm run dist:win
+            artifact: release/GearlAI-*-x64-setup.exe
+          - os: macos-latest
+            build_cmd: pnpm run dist:mac:universal
+            artifact: release/GearlAI-*-universal.dmg
+          - os: ubuntu-latest
+            build_cmd: pnpm run dist:linux
+            artifact_linux1: release/GearlAI-*amd64.AppImage
+            artifact_linux2: release/GearlAI-*amd64.deb
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,7 +65,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'npm'
 
       - name: Setup PNPM
         run: npm install -g pnpm
@@ -56,29 +72,31 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Get version from package.json
-        id: version
-        run: echo "VERSION=${tag#v}" >> $GITHUB_OUTPUT
-        env:
-          tag: ${{ github.ref_name }}
-
-      - name: Build Windows
-        if: matrix.platform == 'windows'
-        run: pnpm run dist:win
+      - name: Build
+        run: ${{ matrix.build_cmd }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build macOS
-        if: matrix.platform == 'macos'
-        run: pnpm run dist:mac:universal
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}
+          path: |
+            ${{ matrix.artifact }}
+            ${{ matrix.artifact_linux1 }}
+            ${{ matrix.artifact_linux2 }}
 
-      - name: Build Linux
-        if: matrix.platform == 'linux'
-        run: pnpm run dist:linux
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: List artifacts
+        run: find artifacts -type f -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" | sort
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -89,23 +107,15 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: |
-            release/GearlAI-*-x64-setup.exe
-            release/GearlAI-*.dmg
-            release/GearlAI-*amd64.AppImage
-            release/GearlAI-*amd64.deb
+            artifacts/windows-latest/*.exe
+            artifacts/macos-latest/*.dmg
+            artifacts/ubuntu-latest/*.AppImage
+            artifacts/ubuntu-latest/*.deb
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: windows
-          - platform: macos
-          - platform: linux
 ```
 
-> **Note:** `softprops/action-gh-release@v2` 支持 `files` glob 匹配。实际构建分三 job 效率更高，但 ubuntu-latest 单 job 串行构建更省 quota。
+> **Note:** Windows/macOS 构建分别在不同 runner，artifact 通过 `actions/upload-artifact` 传到 ubuntu job 汇总上传。
 
 - [ ] **Step 2: 提交**
 
@@ -127,7 +137,7 @@ git commit -m "ci: add GitHub Actions release workflow on tag push"
 保留 testMode 分支走内部 API，仅生产环境走 GitHub：
 
 ```typescript
-// GitHub
+// GitHub (从 git remote 确认: https://github.com/menhulu233/gearlai)
 const GITHUB_OWNER = 'menhulu233';
 const GITHUB_REPO = 'gearlai';
 
