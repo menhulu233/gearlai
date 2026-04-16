@@ -68,7 +68,8 @@ const getPlatformDownloadUrl = (release: GithubReleaseResponse): string => {
       return asset.browser_download_url;
     }
 
-    if (platform === 'win32' && name.includes('setup') && name.includes('.exe')) {
+    if (platform === 'win32' && name.includes('setup') && name.endsWith('.exe')) {
+      // Note: electron-builder NSIS output is always x64, no arch suffix in filename
       return asset.browser_download_url;
     }
 
