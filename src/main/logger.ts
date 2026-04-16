@@ -3,9 +3,9 @@
  * Intercepts console.* methods and writes to file + console simultaneously.
  *
  * Log file locations:
- *   macOS:   ~/Library/Logs/Gearl/main.log
- *   Windows: %USERPROFILE%\AppData\Roaming\Gearl\logs\main.log
- *   Linux:   ~/.config/Gearl/logs/main.log
+ *   macOS:   ~/Library/Logs/GearlAI/main.log
+ *   Windows: %USERPROFILE%\AppData\Roaming\GearlAI\logs\main.log
+ *   Linux:   ~/.config/GearlAI/logs/main.log
  */
 
 import log from 'electron-log/main';
@@ -61,7 +61,7 @@ export function initLogger(): void {
 
   // Log startup marker
   log.info('='.repeat(60));
-  log.info(`Gearl started (${process.platform} ${process.arch})`);
+  log.info(`GearlAI started (${process.platform} ${process.arch})`);
   log.info('='.repeat(60));
 }
 

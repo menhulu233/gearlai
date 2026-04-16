@@ -432,11 +432,6 @@ export const EN_PRIORITY_PROVIDERS = ['openai', 'anthropic', 'gemini'] as const;
  * 根据语言获取可见的模型提供商
  */
 export const getVisibleProviders = (language: 'zh' | 'en'): readonly string[] => {
-  // 开发环境下显示所有提供商
-  // if (import.meta.env.DEV) {
-  //   return [...CHINA_PROVIDERS, ...GLOBAL_PROVIDERS];
-  // }
-
   // 中文 → 中国版，英文 → 国际版
   if (language === 'zh') {
     return CHINA_PROVIDERS;

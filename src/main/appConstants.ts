@@ -1,3 +1,3 @@
-export const APP_NAME = 'Gearl';
-export const APP_ID = 'gearl';
+export const APP_NAME = 'GearlAI';
+export const APP_ID = 'com.gearl.app';
 export const DB_FILENAME = 'gearl.sqlite';

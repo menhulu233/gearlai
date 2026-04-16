@@ -66,9 +66,9 @@ function main() {
   run(magick, [inputPath, '-resize', '48x48', win48]);
   run(magick, [win16, win32, win48, winIco]);
 
-  // macOS template images: convert the white lobster to opaque pixels while
-  // forcing the red background fully transparent, then center the glyph with
-  // a small padding to avoid menu bar clipping.
+  // macOS template images: convert the logo to template format for menu bar
+  // compatibility, then center the glyph with a small padding to avoid
+  // menu bar clipping.
   run(magick, [
     inputPath, '-resize', '18x18',
     '-colorspace', 'Gray', '-threshold', '70%',
