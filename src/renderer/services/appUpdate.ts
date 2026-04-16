@@ -3,30 +3,15 @@ import { getUpdateCheckUrl, getFallbackDownloadUrl } from './endpoints';
 export const UPDATE_POLL_INTERVAL_MS = 12 * 60 * 60 * 1000;
 export const UPDATE_HEARTBEAT_INTERVAL_MS = 30 * 60 * 1000;
 
-type ChangeLogLang = {
-  title?: string;
-  content?: string[];
-};
-
-type PlatformDownload = {
-  url?: string;
-};
-
-type UpdateApiResponse = {
-  code?: number;
-  data?: {
-    value?: {
-      version?: string;
-      date?: string;
-      changeLog?: {
-        ch?: ChangeLogLang;
-        en?: ChangeLogLang;
-      };
-      macIntel?: PlatformDownload;
-      macArm?: PlatformDownload;
-      windowsX64?: PlatformDownload;
-    };
-  };
+type GithubReleaseResponse = {
+  tag_name: string;        // "v0.2.4"
+  name: string;            // "GearlAI v0.2.4"
+  body: string;            // markdown changelog
+  published_at: string;    // "2026-04-16T..."
+  assets: Array<{
+    name: string;          // "GearlAI Setup 0.2.4.exe"
+    browser_download_url: string;
+  }>;
 };
 
 export type ChangeLogEntry = { title: string; content: string[] };
@@ -73,18 +58,28 @@ const isNewerVersion = (latestVersion: string, currentVersion: string): boolean 
   compareVersions(latestVersion, currentVersion) > 0
 );
 
-type UpdateValue = NonNullable<NonNullable<UpdateApiResponse['data']>['value']>;
+const getPlatformDownloadUrl = (release: GithubReleaseResponse): string => {
+  const { platform } = window.electron;
 
-const getPlatformDownloadUrl = (value: UpdateValue | undefined): string => {
-  const { platform, arch } = window.electron;
+  for (const asset of release.assets ?? []) {
+    const name = asset.name.toLowerCase();
 
-  if (platform === 'darwin') {
-    const download = arch === 'arm64' ? value?.macArm : value?.macIntel;
-    return download?.url?.trim() || getFallbackDownloadUrl();
-  }
+    if (platform === 'darwin' && name.includes('.dmg')) {
+      return asset.browser_download_url;
+    }
 
-  if (platform === 'win32') {
-    return value?.windowsX64?.url?.trim() || getFallbackDownloadUrl();
+    if (platform === 'win32' && name.includes('setup') && name.includes('.exe')) {
+      return asset.browser_download_url;
+    }
+
+    if (platform === 'linux') {
+      if (name.includes('amd64') && name.endsWith('.appimage')) {
+        return asset.browser_download_url;
+      }
+      if (name.includes('amd64') && name.endsWith('.deb')) {
+        return asset.browser_download_url;
+      }
+    }
   }
 
   return getFallbackDownloadUrl();
@@ -103,29 +98,24 @@ export const checkForAppUpdate = async (currentVersion: string): Promise<AppUpda
     return null;
   }
 
-  const payload = response.data as UpdateApiResponse;
-  if (payload.code !== 0) {
-    return null;
-  }
-
-  const value = payload.data?.value;
-  const latestVersion = value?.version?.trim();
+  const payload = response.data as GithubReleaseResponse;
+  const latestVersion = payload.tag_name?.trim().replace(/^v/, '');
   if (!latestVersion || !isNewerVersion(latestVersion, currentVersion)) {
     return null;
   }
 
-  const toEntry = (log?: ChangeLogLang): ChangeLogEntry => ({
-    title: typeof log?.title === 'string' ? log.title : '',
-    content: Array.isArray(log?.content) ? log.content : [],
-  });
+  // Parse body (markdown) into changelog entries
+  const content = payload.body
+    ? payload.body.split('\n').filter((line) => line.trim().startsWith('-'))
+    : [];
 
   return {
     latestVersion,
-    date: value?.date?.trim() || '',
+    date: payload.published_at ? new Date(payload.published_at).toLocaleDateString() : '',
     changeLog: {
-      zh: toEntry(value?.changeLog?.ch),
-      en: toEntry(value?.changeLog?.en),
+      zh: { title: '', content },
+      en: { title: '', content },
     },
-    url: getPlatformDownloadUrl(value),
+    url: getPlatformDownloadUrl(payload),
   };
 };
