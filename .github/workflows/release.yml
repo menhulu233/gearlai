@@ -14,13 +14,13 @@ jobs:
         include:
           - os: windows-latest
             build_cmd: npm run dist:win
-            artifact: release/GearlAI Setup*.exe
+            artifact: release/GearlAI Setup *.exe
           - os: macos-latest
             build_cmd: npm run dist:mac:universal
             artifact: release/GearlAI-*.dmg
           - os: ubuntu-latest
             build_cmd: npm run dist:linux
-            artifact: release/
+            artifact: release/*
 
     steps:
       - name: Checkout
@@ -30,14 +30,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build
         run: ${{ matrix.build_cmd }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
