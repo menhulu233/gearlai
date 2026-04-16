@@ -47,15 +47,14 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            build_cmd: pnpm run dist:win
-            artifact: release/GearlAI-*-x64-setup.exe
+            build_cmd: npm run dist:win
+            artifact: release/GearlAI Setup*.exe
           - os: macos-latest
-            build_cmd: pnpm run dist:mac:universal
-            artifact: release/GearlAI-*-universal.dmg
+            build_cmd: npm run dist:mac:universal
+            artifact: release/GearlAI-*.dmg
           - os: ubuntu-latest
-            build_cmd: pnpm run dist:linux
-            artifact_linux1: release/GearlAI-*amd64.AppImage
-            artifact_linux2: release/GearlAI-*amd64.deb
+            build_cmd: npm run dist:linux
+            artifact: release/
 
     steps:
       - name: Checkout
@@ -66,11 +65,8 @@ jobs:
         with:
           node-version: '24'
 
-      - name: Setup PNPM
-        run: npm install -g pnpm
-
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci
 
       - name: Build
         run: ${{ matrix.build_cmd }}
@@ -81,10 +77,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}
-          path: |
-            ${{ matrix.artifact }}
-            ${{ matrix.artifact_linux1 }}
-            ${{ matrix.artifact_linux2 }}
+          path: ${{ matrix.artifact }}
 
   release:
     needs: build
@@ -96,7 +89,10 @@ jobs:
           path: artifacts
 
       - name: List artifacts
-        run: find artifacts -type f -name "*.exe" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.deb" | sort
+        run: |
+          echo "=== Windows ===" && ls artifacts/windows-latest/ 2>/dev/null || true
+          echo "=== macOS ===" && ls artifacts/macos-latest/ 2>/dev/null || true
+          echo "=== Linux ===" && ls artifacts/ubuntu-latest/ 2>/dev/null || true
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -107,10 +103,9 @@ jobs:
           prerelease: false
           generate_release_notes: true
           files: |
-            artifacts/windows-latest/*.exe
-            artifacts/macos-latest/*.dmg
-            artifacts/ubuntu-latest/*.AppImage
-            artifacts/ubuntu-latest/*.deb
+            artifacts/windows-latest/*
+            artifacts/macos-latest/*
+            artifacts/ubuntu-latest/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
