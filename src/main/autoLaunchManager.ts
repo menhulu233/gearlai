@@ -1,4 +1,53 @@
 import { app } from 'electron';
+import { execSync } from 'child_process';
+
+function ensureWindowsAutoLaunchArgs(): void {
+  if (process.platform !== 'win32') return;
+  try {
+    const appName = app.getName();
+    const exePath = app.getPath('exe');
+    const regPath = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run';
+
+    let currentValue: string | undefined;
+    try {
+      const output = execSync(`reg query "${regPath}" /v "${appName}"`, { encoding: 'utf-8' });
+      const lines = output.split('\n').map((l) => l.trim()).filter(Boolean);
+      const valueLine = lines.find((l) => l.includes(appName));
+      if (valueLine) {
+        const regSzIndex = valueLine.indexOf('REG_SZ');
+        if (regSzIndex !== -1) {
+          currentValue = valueLine.slice(regSzIndex + 'REG_SZ'.length).trim();
+        }
+      }
+    } catch {
+      // Key or value doesn't exist
+      return;
+    }
+
+    const expectedValue = `"${exePath}" --auto-launched`;
+    // Fix if not properly quoted or missing args (Electron < 40.8.0 bug on Windows)
+    if (!currentValue || !currentValue.startsWith('"') || !currentValue.includes('--auto-launched')) {
+      execSync(`reg add "${regPath}" /v "${appName}" /t REG_SZ /d "${expectedValue}" /f`);
+      console.log('[AutoLaunch] Fixed Windows registry entry for quoted path and args');
+    }
+  } catch (error) {
+    console.error('[AutoLaunch] Failed to ensure Windows auto-launch args:', error);
+  }
+}
+
+export function repairWindowsAutoLaunchIfNeeded(): void {
+  if (process.platform !== 'win32') return;
+  try {
+    const settings = app.getLoginItemSettings({
+      args: ['--auto-launched'],
+    });
+    if (settings.openAtLogin) {
+      ensureWindowsAutoLaunchArgs();
+    }
+  } catch (error) {
+    console.error('[AutoLaunch] Failed to repair Windows auto-launch:', error);
+  }
+}
 
 export function getAutoLaunchEnabled(): boolean {
   try {
@@ -26,6 +75,11 @@ export function setAutoLaunchEnabled(enabled: boolean): void {
       // Windows: 通过命令行参数标记自启动
       args: enabled ? ['--auto-launched'] : [],
     });
+    // Windows: Electron < 40.8.0 does not quote the exe path in registry,
+    // causing args to be lost when the path contains spaces.
+    if (enabled && process.platform === 'win32') {
+      ensureWindowsAutoLaunchArgs();
+    }
   } catch (error) {
     console.error('Failed to set auto-launch settings:', error);
     throw error;

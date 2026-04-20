@@ -17,7 +17,7 @@ import { IMGatewayManager, IMPlatform, IMGatewayConfig } from './im';
 import { APP_NAME } from './appConstants';
 import { getSkillServiceManager } from './skillServices';
 import { createTray, destroyTray, updateTrayMenu } from './trayManager';
-import { isAutoLaunched, getAutoLaunchEnabled, setAutoLaunchEnabled } from './autoLaunchManager';
+import { isAutoLaunched, getAutoLaunchEnabled, setAutoLaunchEnabled, repairWindowsAutoLaunchIfNeeded } from './autoLaunchManager';
 import { McpStore } from './mcpStore';
 import { ScheduledTaskStore } from './scheduledTaskStore';
 import { Scheduler } from './libs/scheduler';
@@ -910,6 +910,10 @@ if (!gotTheLock) {
 } else {
   app.on('second-instance', (_event, commandLine, workingDirectory) => {
     console.log('[Main] second-instance event', { commandLine, workingDirectory });
+    // 如果第二个实例是开机自启的，不要把它显示出来
+    if (commandLine.includes('--auto-launched')) {
+      return;
+    }
     // 如果尝试启动第二个实例，则聚焦到主窗口
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore();
@@ -2556,6 +2560,9 @@ if (!gotTheLock) {
       // 开机自启时不显示窗口，仅显示托盘图标
       if (!isAutoLaunched()) {
         mainWindow?.show();
+      } else if (isWindows && mainWindow && !mainWindow.isDestroyed()) {
+        // Windows: 显式 hide 防止某些情况下窗口闪现
+        mainWindow.hide();
       }
       // 窗口就绪后创建系统托盘
       createTray(() => mainWindow, getStore());
@@ -2663,6 +2670,10 @@ if (!gotTheLock) {
     console.log('[Main] initApp: starting initStore()');
     store = await initStore();
     console.log('[Main] initApp: store initialized');
+
+    // Windows: repair broken auto-launch registry entries from older Electron versions
+    // so that --auto-launched arg is correctly passed on next boot.
+    repairWindowsAutoLaunchIfNeeded();
 
     // Defensive recovery: app may be force-closed during execution and leave
     // stale running flags in DB. Normalize them on startup.
