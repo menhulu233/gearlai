@@ -322,7 +322,7 @@ const EmailSkillConfig: React.FC<EmailSkillConfigProps> = ({ onClose }) => {
   const canTest = Boolean(email && password && imapHost && smtpHost);
   const connectivityPassed = connectivityResult?.verdict === 'pass';
 
-  const inputClassName = 'block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-xs';
+  const inputClassName = 'block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-xs';
   const labelClassName = 'block text-xs font-medium text-foreground mb-1';
 
   if (loading) {
@@ -624,7 +624,7 @@ const EmailSkillConfig: React.FC<EmailSkillConfigProps> = ({ onClose }) => {
           type="button"
           onClick={handleConnectivityTest}
           disabled={isTesting || !canTest}
-          className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+          className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-pressed"
         >
           <SignalIcon className="h-3.5 w-3.5 mr-1.5" />
           {isTesting ? i18nService.t('imConnectivityTesting') : i18nService.t('imConnectivityTest')}

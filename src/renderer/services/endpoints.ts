@@ -24,5 +24,5 @@ export const getFallbackDownloadUrl = () => isTestMode()
 
 // Skill 商店
 export const getSkillStoreUrl = () => isTestMode()
-  ? 'http://localhost:18000/openapi/get/luna/hardware/gearlai/test/skill-store'
-  : 'http://localhost:18000/openapi/get/luna/hardware/gearlai/prod/skill-store';
+  ? 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearlai/test/skill-store'
+  : 'https://api-overmind.youdao.com/openapi/get/luna/hardware/gearlai/prod/skill-store';

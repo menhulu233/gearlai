@@ -404,8 +404,8 @@ export const defaultConfig: AppConfig = {
   useSystemProxy: false,
   app: {
     port: 3000,
-    isDevelopment: process.env.NODE_ENV === 'development',
-    testMode: process.env.NODE_ENV === 'development',
+    isDevelopment: import.meta.env.DEV,
+    testMode: import.meta.env.DEV,
   },
   shortcuts: {
     newChat: 'Ctrl+N',

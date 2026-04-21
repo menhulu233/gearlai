@@ -408,7 +408,7 @@ const IMSettings: React.FC = () => {
       type="button"
       onClick={() => handleConnectivityTest(platform)}
       disabled={isLoading || testingPlatform === platform}
-      className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+      className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-pressed"
     >
       <SignalIcon className="h-3.5 w-3.5 mr-1.5" />
       {testingPlatform === platform
@@ -534,7 +534,7 @@ const IMSettings: React.FC = () => {
                   value={config.dingtalk.clientId}
                   onChange={(e) => handleDingTalkChange('clientId', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder="dingxxxxxx"
                 />
                 {config.dingtalk.clientId && (
@@ -563,7 +563,7 @@ const IMSettings: React.FC = () => {
                   value={config.dingtalk.clientSecret}
                   onChange={(e) => handleDingTalkChange('clientSecret', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -616,7 +616,7 @@ const IMSettings: React.FC = () => {
                   value={config.feishu.appId}
                   onChange={(e) => handleFeishuChange('appId', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder="cli_xxxxx"
                 />
                 {config.feishu.appId && (
@@ -645,7 +645,7 @@ const IMSettings: React.FC = () => {
                   value={config.feishu.appSecret}
                   onChange={(e) => handleFeishuChange('appSecret', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -698,7 +698,7 @@ const IMSettings: React.FC = () => {
                   value={config.qq.appId}
                   onChange={(e) => handleQQChange('appId', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder="102xxxxx"
                 />
                 {config.qq.appId && (
@@ -727,7 +727,7 @@ const IMSettings: React.FC = () => {
                   value={config.qq.appSecret}
                   onChange={(e) => handleQQChange('appSecret', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -780,7 +780,7 @@ const IMSettings: React.FC = () => {
                   value={config.telegram.botToken}
                   onChange={(e) => handleTelegramChange('botToken', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -831,7 +831,7 @@ const IMSettings: React.FC = () => {
                       }
                     }
                   }}
-                  className="block flex-1 rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-sm transition-colors"
+                  className="block flex-1 rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-sm transition-colors"
                   placeholder={i18nService.t('telegramAllowedUserIdsPlaceholder') || '输入 Telegram User ID'}
                 />
                 <button
@@ -912,7 +912,7 @@ const IMSettings: React.FC = () => {
                   value={config.discord.botToken}
                   onChange={(e) => handleDiscordChange('botToken', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="MTIzNDU2Nzg5MDEyMzQ1Njc4OQ..."
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -988,7 +988,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.appKey}
                   onChange={(e) => handleNimChange('appKey', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder="your_app_key"
                 />
                 {config.nim.appKey && (
@@ -1020,7 +1020,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.account}
                   onChange={(e) => handleNimChange('account', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder={i18nService.t('nimAccountPlaceholder') || 'bot_account_id'}
                 />
                 {config.nim.account && (
@@ -1052,7 +1052,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.token}
                   onChange={(e) => handleNimChange('token', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -1092,7 +1092,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.accountWhitelist}
                   onChange={(e) => handleNimChange('accountWhitelist', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder="account1,account2"
                 />
                 {config.nim.accountWhitelist && (
@@ -1125,7 +1125,7 @@ const IMSettings: React.FC = () => {
                   handleNimChange('teamPolicy', newValue);
                   saveNimConfigWithUpdate({ teamPolicy: newValue });
                 }}
-                className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-sm transition-colors"
+                className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-sm transition-colors"
               >
                 <option value="disabled">{i18nService.t('nimTeamPolicyDisabled') || '禁用 - 不响应群消息'}</option>
                 <option value="open">{i18nService.t('nimTeamPolicyOpen') || '开放 - 响应所有群的@消息'}</option>
@@ -1147,7 +1147,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.teamAllowlist || ''}
                   onChange={(e) => handleNimChange('teamAllowlist', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-sm transition-colors"
                   placeholder="team_id_1,team_id_2"
                 />
                 <p className="text-xs text-secondary dark:text-secondary">
@@ -1195,7 +1195,7 @@ const IMSettings: React.FC = () => {
                   value={config.nim.qchatServerIds || ''}
                   onChange={(e) => handleNimChange('qchatServerIds', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-sm transition-colors"
                   placeholder={i18nService.t('nimQChatServerIdsPlaceholder') || '留空自动发现所有已加入的服务器'}
                 />
                 <p className="text-xs text-secondary dark:text-secondary">
@@ -1238,7 +1238,7 @@ const IMSettings: React.FC = () => {
                   value={config.xiaomifeng.clientId}
                   onChange={(e) => handleXiaomifengChange('clientId', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder={i18nService.t('xiaomifengClientIdPlaceholder') || '您的Client ID'}
                 />
                 {config.xiaomifeng.clientId && (
@@ -1267,7 +1267,7 @@ const IMSettings: React.FC = () => {
                   value={config.xiaomifeng.secret}
                   onChange={(e) => handleXiaomifengChange('secret', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -1327,7 +1327,7 @@ const IMSettings: React.FC = () => {
                   value={config.wecom.botId}
                   onChange={(e) => handleWecomChange('botId', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-sm transition-colors"
                   placeholder={i18nService.t('wecomBotIdPlaceholder') || '您的 Bot ID'}
                 />
                 {config.wecom.botId && (
@@ -1356,7 +1356,7 @@ const IMSettings: React.FC = () => {
                   value={config.wecom.secret}
                   onChange={(e) => handleWecomChange('secret', e.target.value)}
                   onBlur={handleSaveConfig}
-                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
+                  className="block w-full rounded-lg dark:bg-surface/80 bg-surface/80 dark:border-border/60 border-border/60 border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-sm transition-colors"
                   placeholder="••••••••••••"
                 />
                 <div className="absolute right-2 inset-y-0 flex items-center gap-1">

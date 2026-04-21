@@ -1895,7 +1895,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   } ${
                     autoLaunch
                       ? 'bg-primary'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                 >
                   <span
@@ -1944,7 +1944,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   } ${
                     preventSleep
                       ? 'bg-primary'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                 >
                   <span
@@ -1975,7 +1975,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
                     useSystemProxy
                       ? 'bg-primary'
-                      : 'bg-gray-300 dark:bg-gray-600'
+                      : 'bg-gray-200 dark:bg-gray-600'
                   }`}
                 >
                   <span
@@ -2004,7 +2004,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                         setTheme(t.meta.appearance as 'light' | 'dark');
                         themeService.setThemeById(t.meta.id);
                       }}
-                      className={`flex flex-col items-center rounded-xl border-2 p-2 transition-colors cursor-pointer ${
+                      className={`flex flex-col items-center rounded-md border-2 p-2 transition-colors cursor-pointer ${
                         isSelected
                           ? 'border-primary bg-primary-muted'
                           : 'border-transparent hover:border-primary/40'
@@ -2064,7 +2064,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   return (
                     <label
                       key={option.value}
-                      className={`flex items-start gap-3 rounded-xl border px-3 py-2 text-sm transition-colors ${
+                      className={`flex items-start gap-3 rounded-md border px-3 py-2 text-sm transition-colors ${
                         isDisabled
                           ? 'cursor-not-allowed opacity-60 border-border'
                           : 'cursor-pointer border-border hover:border-primary'
@@ -2122,7 +2122,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   type="button"
                   onClick={handleInstallCoworkSandbox}
                   disabled={coworkSandboxInstalling || coworkSandboxLoading}
-                  className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors disabled:opacity-50 active:scale-[0.98]"
+                  className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-primary hover:bg-primaryHover text-white text-sm font-medium transition-colors disabled:opacity-50 active:scale-pressed"
                 >
                   {coworkSandboxInstalling ? i18nService.t('coworkSandboxInstalling') : i18nService.t('coworkSandboxInstall')}
                 </button>
@@ -2140,7 +2140,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
       case 'coworkMemory':
         return (
           <div className="space-y-6">
-            <div className="space-y-3 rounded-xl border px-4 py-4 border-border">
+            <div className="space-y-3 rounded-md border px-4 py-4 border-border">
               <div className="text-sm font-medium text-foreground">
                 {i18nService.t('coworkMemoryTitle')}
               </div>
@@ -2182,7 +2182,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               </label>
             </div>
 
-            <div className="space-y-4 rounded-xl border px-4 py-4 border-border">
+            <div className="space-y-4 rounded-md border px-4 py-4 border-border">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <div className="text-sm font-medium text-foreground">
@@ -2195,7 +2195,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 <button
                   type="button"
                   onClick={handleOpenCoworkMemoryModal}
-                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-lg bg-primary hover:bg-primaryHover text-white text-sm transition-colors active:scale-[0.98]"
+                  className="inline-flex items-center justify-center px-3 py-1.5 rounded-md bg-primary hover:bg-primaryHover text-white text-sm transition-colors active:scale-pressed"
                 >
                   <PlusCircleIcon className="h-4 w-4 mr-1.5" />
                   {i18nService.t('coworkMemoryCrudCreate')}
@@ -2213,10 +2213,10 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 value={coworkMemoryQuery}
                 onChange={(event) => setCoworkMemoryQuery(event.target.value)}
                 placeholder={i18nService.t('coworkMemorySearchPlaceholder')}
-                className="w-full rounded-lg border px-3 py-2 text-sm border-border dark:bg-surface bg-surface"
+                className="w-full rounded-md border px-3 py-2 text-sm border-border dark:bg-surface bg-surface"
               />
 
-              <div className="max-h-[500px] overflow-auto rounded-lg border border-border">
+              <div className="max-h-[500px] overflow-auto rounded-md border border-border">
                 {coworkMemoryListLoading ? (
                   <div className="px-3 py-3 text-xs text-secondary">
                     {i18nService.t('loading')}
@@ -2285,7 +2285,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     type="button"
                     onClick={handleImportProvidersClick}
                     disabled={isImportingProviders || isExportingProviders}
-                    className="inline-flex items-center px-2 py-1 text-[11px] font-medium rounded-lg border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+                    className="inline-flex items-center px-2 py-1 text-[11px] font-medium rounded-md border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-pressed"
                   >
                     {i18nService.t('import')}
                   </button>
@@ -2293,7 +2293,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     type="button"
                     onClick={handleExportProviders}
                     disabled={isImportingProviders || isExportingProviders}
-                    className="inline-flex items-center px-2 py-1 text-[11px] font-medium rounded-lg border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+                    className="inline-flex items-center px-2 py-1 text-[11px] font-medium rounded-md border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-pressed"
                   >
                     {i18nService.t('export')}
                   </button>
@@ -2315,7 +2315,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   <div
                     key={provider}
                     onClick={() => handleProviderChange(providerKey)}
-                    className={`flex items-center p-2 rounded-xl cursor-pointer transition-colors ${
+                    className={`flex items-center p-2 rounded-md cursor-pointer transition-colors ${
                       activeProvider === provider
                         ? 'bg-primary/10 dark:bg-primary/20 border border-primary/30 shadow-subtle'
                         : 'dark:bg-surface bg-surface hover:bg-surface-raised border border-transparent'
@@ -2370,7 +2370,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   {(providerMeta[activeProvider]?.label ?? activeProvider.charAt(0).toUpperCase() + activeProvider.slice(1))} {i18nService.t('providerSettings')}
                 </h3>
                 <div
-                  className={`px-2 py-0.5 rounded-lg text-xs font-medium ${
+                  className={`px-2 py-0.5 rounded-md text-xs font-medium ${
                     providers[activeProvider].enabled
                       ? 'bg-green-500/20 text-green-600 dark:text-green-400'
                       : 'bg-red-500/20 text-red-600 dark:text-red-400'
@@ -2391,7 +2391,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                       id={`${activeProvider}-apiKey`}
                       value={providers[activeProvider].apiKey}
                       onChange={(e) => handleProviderConfigChange(activeProvider, 'apiKey', e.target.value)}
-                      className="block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-16 text-xs"
+                      className="block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-16 text-xs"
                       placeholder={i18nService.t('apiKeyPlaceholder')}
                     />
                     <div className="absolute right-2 inset-y-0 flex items-center gap-1">
@@ -2447,7 +2447,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     }
                     onChange={(e) => handleProviderConfigChange(activeProvider, 'baseUrl', e.target.value)}
                     disabled={isBaseUrlLocked}
-                    className={`block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 pr-8 text-xs ${isBaseUrlLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 pr-8 text-xs ${isBaseUrlLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
                     placeholder={getProviderDefaultBaseUrl(activeProvider, getEffectiveApiFormat(activeProvider, providers[activeProvider].apiFormat)) || defaultConfig.providers?.[activeProvider]?.baseUrl || i18nService.t('baseUrlPlaceholder')}
                   />
                   {providers[activeProvider].baseUrl && !isBaseUrlLocked && (
@@ -2479,7 +2479,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 )}
                 {/* GLM Coding Plan 提示 */}
                 {activeProvider === 'zhipu' && providers.zhipu.codingPlanEnabled && (
-                  <div className="mt-1.5 p-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="mt-1.5 p-2 rounded-md bg-primary/10 border border-primary/20">
                     <p className="text-[11px] text-primary dark:text-primary">
                       <span className="font-medium">GLM Coding Plan:</span> {i18nService.t('zhipuCodingPlanEndpointHint')}
                     </p>
@@ -2487,7 +2487,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 )}
                 {/* Qwen Coding Plan 提示 */}
                 {activeProvider === 'qwen' && providers.qwen.codingPlanEnabled && (
-                  <div className="mt-1.5 p-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="mt-1.5 p-2 rounded-md bg-primary/10 border border-primary/20">
                     <p className="text-[11px] text-primary dark:text-primary">
                       <span className="font-medium">Coding Plan:</span> {i18nService.t('qwenCodingPlanEndpointHint')}
                     </p>
@@ -2495,7 +2495,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 )}
                 {/* Volcengine Coding Plan 提示 */}
                 {activeProvider === 'volcengine' && providers.volcengine.codingPlanEnabled && (
-                  <div className="mt-1.5 p-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="mt-1.5 p-2 rounded-md bg-primary/10 border border-primary/20">
                     <p className="text-[11px] text-primary dark:text-primary">
                       <span className="font-medium">Coding Plan:</span> {i18nService.t('volcengineCodingPlanEndpointHint')}
                     </p>
@@ -2503,7 +2503,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 )}
                 {/* Moonshot Coding Plan 提示 */}
                 {activeProvider === 'moonshot' && providers.moonshot.codingPlanEnabled && (
-                  <div className="mt-1.5 p-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <div className="mt-1.5 p-2 rounded-md bg-primary/10 border border-primary/20">
                     <p className="text-[11px] text-primary dark:text-primary">
                       <span className="font-medium">Coding Plan:</span> {i18nService.t('moonshotCodingPlanEndpointHint')}
                     </p>
@@ -2553,7 +2553,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
               {/* GLM Coding Plan 开关 (仅 Zhipu) */}
               {activeProvider === 'zhipu' && (
-                <div className="flex items-center justify-between p-3 rounded-xl dark:bg-surface bg-surface/50 border border-border">
+                <div className="flex items-center justify-between p-3 rounded-md dark:bg-surface bg-surface/50 border border-border">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs font-medium text-foreground">
@@ -2581,7 +2581,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
               {/* Qwen Coding Plan 开关 (仅 Qwen) */}
               {activeProvider === 'qwen' && (
-                <div className="flex items-center justify-between p-3 rounded-xl dark:bg-surface bg-surface/50 border border-border">
+                <div className="flex items-center justify-between p-3 rounded-md dark:bg-surface bg-surface/50 border border-border">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs font-medium text-foreground">
@@ -2609,7 +2609,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
               {/* Volcengine Coding Plan 开关 (仅 Volcengine) */}
               {activeProvider === 'volcengine' && (
-                <div className="flex items-center justify-between p-3 rounded-xl dark:bg-surface bg-surface/50 border border-border">
+                <div className="flex items-center justify-between p-3 rounded-md dark:bg-surface bg-surface/50 border border-border">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs font-medium text-foreground">
@@ -2637,7 +2637,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
               {/* Moonshot Coding Plan 开关 (仅 Moonshot) */}
               {activeProvider === 'moonshot' && (
-                <div className="flex items-center justify-between p-3 rounded-xl dark:bg-surface bg-surface/50 border border-border">
+                <div className="flex items-center justify-between p-3 rounded-md dark:bg-surface bg-surface/50 border border-border">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2">
                       <span className="text-xs font-medium text-foreground">
@@ -2669,7 +2669,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   type="button"
                   onClick={handleTestConnection}
                   disabled={isTesting || (providerRequiresApiKey(activeProvider) && !providers[activeProvider].apiKey)}
-                  className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+                  className="inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-md border border-border text-foreground hover:bg-surface-raised disabled:opacity-50 disabled:cursor-not-allowed transition-colors active:scale-pressed"
                 >
                   <SignalIcon className="h-3.5 w-3.5 mr-1.5" />
                   {isTesting ? i18nService.t('testing') : i18nService.t('testConnection')}
@@ -2696,7 +2696,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   {providers[activeProvider].models?.map(model => (
                     <div
                       key={model.id}
-                      className="dark:bg-surface bg-surface/50 p-2 rounded-xl border-border border transition-colors hover:border-primary group"
+                      className="dark:bg-surface bg-surface/50 p-2 rounded-md border-border border transition-colors hover:border-primary group"
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-1.5">
@@ -2730,7 +2730,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   ))}
 
                   {(!providers[activeProvider].models || providers[activeProvider].models.length === 0) && (
-                    <div className="dark:bg-surface/20 bg-surface/20 p-2.5 rounded-xl border dark:border-border/50 border-border/50 text-center">
+                    <div className="dark:bg-surface/20 bg-surface/20 p-2.5 rounded-md border dark:border-border/50 border-border/50 text-center">
                       <p className="text-[11px] text-secondary">{i18nService.t('noModelsAvailable')}</p>
                       <button
                         type="button"
@@ -2763,7 +2763,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     value={shortcuts.newChat}
                     onChange={(e) => handleShortcutChange('newChat', e.target.value)}
                     data-shortcut-input="true"
-                    className="w-32 rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-1.5 text-sm"
+                    className="w-32 rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-1.5 text-sm"
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -2773,7 +2773,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     value={shortcuts.search}
                     onChange={(e) => handleShortcutChange('search', e.target.value)}
                     data-shortcut-input="true"
-                    className="w-32 rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-1.5 text-sm"
+                    className="w-32 rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-1.5 text-sm"
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -2783,7 +2783,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     value={shortcuts.settings}
                     onChange={(e) => handleShortcutChange('settings', e.target.value)}
                     data-shortcut-input="true"
-                    className="w-32 rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-1.5 text-sm"
+                    className="w-32 rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-1.5 text-sm"
                   />
                 </div>
               </div>
@@ -2814,7 +2814,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
             <span className="text-xs text-secondary mt-1">v{appVersion}</span>
 
             {/* Info Card */}
-            <div className="w-full mt-8 rounded-xl border border-border overflow-hidden">
+            <div className="w-full mt-8 rounded-md border border-border overflow-hidden">
               <div className="flex items-center justify-between px-4 py-3 border-b border-border">
                 <span className="text-sm text-foreground">{i18nService.t('aboutVersion')}</span>
                 <div className="flex items-center gap-2">
@@ -2878,7 +2878,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     aria-checked={testMode}
                     onClick={() => setTestMode((prev) => !prev)}
                     className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors ${
-                      testMode ? 'bg-primary' : 'bg-gray-300 dark:bg-gray-600'
+                      testMode ? 'bg-primary' : 'bg-gray-200 dark:bg-gray-600'
                     }`}
                   >
                     <span
@@ -2939,11 +2939,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
       onClick={onClose}
     >
       <div
-        className="relative flex w-[900px] h-[80vh] rounded-2xl border-border border shadow-modal overflow-hidden modal-content"
+        className="relative flex w-[900px] h-[80vh] rounded-md border-border border shadow-modal overflow-hidden modal-content"
         onClick={handleSettingsClick}
       >
         {/* Left sidebar */}
-        <div className="w-[220px] shrink-0 flex flex-col bg-surface-raised border-r border-border rounded-l-2xl overflow-y-auto">
+        <div className="w-[220px] shrink-0 flex flex-col bg-surface-raised border-r border-border rounded-l-md overflow-y-auto">
           <div className="px-5 pt-5 pb-3">
             <h2 className="text-lg font-semibold text-foreground">{i18nService.t('settings')}</h2>
           </div>
@@ -2952,7 +2952,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               <button
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-left ${
+                className={`flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors text-left ${
                   activeTab === tab.key
                     ? 'bg-primary/10 text-primary'
                     : 'text-secondary hover:text-foreground hover:bg-surface-raised'
@@ -2966,13 +2966,13 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
         </div>
 
         {/* Right content */}
-        <div className="relative flex-1 flex flex-col min-w-0 overflow-hidden dark:bg-background bg-background rounded-r-2xl">
+        <div className="relative flex-1 flex flex-col min-w-0 overflow-hidden dark:bg-background bg-background rounded-r-md">
           {/* Content header */}
           <div className="flex justify-between items-center px-6 pt-5 pb-3 shrink-0">
             <h3 className="text-lg font-semibold text-foreground">{activeTabLabel}</h3>
             <button
               onClick={onClose}
-              className="text-secondary hover:text-foreground p-1.5 hover:bg-surface-raised rounded-lg transition-colors"
+              className="text-secondary hover:text-foreground p-1.5 hover:bg-surface-raised rounded-md transition-colors"
             >
               <XMarkIcon className="h-5 w-5" />
             </button>
@@ -3011,14 +3011,14 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 text-foreground hover:bg-surface-raised rounded-xl transition-colors text-sm font-medium border border-border active:scale-[0.98]"
+                className="px-4 py-2 text-foreground hover:bg-surface-raised rounded-md transition-colors text-sm font-medium border border-border active:scale-pressed"
               >
                 {i18nService.t('cancel')}
               </button>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-4 py-2 bg-primary hover:bg-primaryHover text-white rounded-xl transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                className="px-4 py-2 bg-primary hover:bg-primaryHover text-white rounded-md transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed active:scale-pressed"
               >
                 {isSaving ? i18nService.t('saving') : i18nService.t('save')}
               </button>
@@ -3029,7 +3029,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
         {isTestResultModalOpen && testResult && (
           <div
-            className="absolute inset-0 z-30 flex items-center justify-center bg-black/35 px-4 rounded-2xl"
+            className="absolute inset-0 z-30 flex items-center justify-center bg-black/35 px-4 rounded-md"
             onClick={() => setIsTestResultModalOpen(false)}
           >
             <div
@@ -3037,7 +3037,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
               aria-modal="true"
               aria-label={i18nService.t('connectionTestResult')}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-2xl dark:bg-surface bg-background border-border border shadow-modal p-4"
+              className="w-full max-w-md rounded-md dark:bg-surface bg-background border-border border shadow-modal p-4"
             >
               <div className="flex items-center justify-between mb-3">
                 <h4 className="text-sm font-semibold text-foreground">
@@ -3073,7 +3073,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 <button
                   type="button"
                   onClick={() => setIsTestResultModalOpen(false)}
-                  className="px-3 py-1.5 text-xs font-medium rounded-xl border border-border text-foreground hover:bg-surface-raised transition-colors active:scale-[0.98]"
+                  className="px-3 py-1.5 text-xs font-medium rounded-md border border-border text-foreground hover:bg-surface-raised transition-colors active:scale-pressed"
                 >
                   {i18nService.t('close')}
                 </button>
@@ -3084,7 +3084,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
         {(isAddingModel || isEditingModel) && (
           <div
-            className="absolute inset-0 z-20 flex items-center justify-center bg-black/35 px-4 rounded-2xl"
+            className="absolute inset-0 z-20 flex items-center justify-center bg-black/35 px-4 rounded-md"
             onClick={handleCancelModelEdit}
           >
               <div
@@ -3093,7 +3093,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                 aria-label={isEditingModel ? i18nService.t('editModel') : i18nService.t('addNewModel')}
                 onClick={(e) => e.stopPropagation()}
                 onKeyDown={handleModelDialogKeyDown}
-                className="w-full max-w-md rounded-2xl dark:bg-surface bg-background border-border border shadow-modal p-4"
+                className="w-full max-w-md rounded-md dark:bg-surface bg-background border-border border shadow-modal p-4"
               >
                 <div className="flex items-center justify-between mb-3">
                   <h4 className="text-sm font-semibold text-foreground">
@@ -3134,7 +3134,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                               setModelFormError(null);
                             }
                           }}
-                          className="block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-xs"
+                          className="block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-xs"
                           placeholder={i18nService.t('ollamaModelNamePlaceholder')}
                         />
                         <p className="mt-1 text-[11px] dark:text-secondary/70 text-secondary/70">
@@ -3154,7 +3154,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                               setModelFormError(null);
                             }
                           }}
-                          className="block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-xs"
+                          className="block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-xs"
                           placeholder={i18nService.t('ollamaDisplayNamePlaceholder')}
                         />
                         <p className="mt-1 text-[11px] dark:text-secondary/70 text-secondary/70">
@@ -3178,7 +3178,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                               setModelFormError(null);
                             }
                           }}
-                          className="block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-xs"
+                          className="block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-xs"
                           placeholder="GPT-4"
                         />
                       </div>
@@ -3195,7 +3195,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                               setModelFormError(null);
                             }
                           }}
-                          className="block w-full rounded-xl bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-1 focus:ring-primary/30 text-foreground px-3 py-2 text-xs"
+                          className="block w-full rounded-md bg-surface-inset dark:bg-surface-inset border-border border focus:border-primary focus:ring-2 focus:ring-primary/50 text-foreground px-3 py-2 text-xs"
                           placeholder="gpt-4"
                         />
                       </div>
@@ -3222,14 +3222,14 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   <button
                     type="button"
                     onClick={handleCancelModelEdit}
-                    className="px-3 py-1.5 text-xs text-foreground hover:bg-surface-raised rounded-xl border border-border"
+                    className="px-3 py-1.5 text-xs text-foreground hover:bg-surface-raised rounded-md border border-border"
                   >
                     {i18nService.t('cancel')}
                   </button>
                   <button
                     type="button"
                     onClick={handleSaveNewModel}
-                    className="px-3 py-1.5 text-xs text-white bg-primary hover:bg-primaryHover rounded-xl active:scale-[0.98]"
+                    className="px-3 py-1.5 text-xs text-white bg-primary hover:bg-primaryHover rounded-md active:scale-pressed"
                   >
                     {i18nService.t('save')}
                   </button>
@@ -3241,11 +3241,11 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
           {/* Memory Modal */}
           {showMemoryModal && (
             <div
-              className="absolute inset-0 z-20 flex items-center justify-center bg-black/35 px-4 rounded-2xl"
+              className="absolute inset-0 z-20 flex items-center justify-center bg-black/35 px-4 rounded-md"
               onClick={resetCoworkMemoryEditor}
             >
               <div
-                className="dark:bg-surface bg-surface border-border border rounded-2xl shadow-xl w-full max-w-md"
+                className="dark:bg-surface bg-surface border-border border rounded-md shadow-xl w-full max-w-md"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="px-5 pt-5 pb-4 border-b border-border">
@@ -3256,7 +3256,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
 
                 <div className="px-5 py-4 space-y-4">
                   {coworkMemoryEditingId && (
-                    <div className="rounded-lg border px-2 py-1 text-xs border-border text-secondary">
+                    <div className="rounded-md border px-2 py-1 text-xs border-border text-secondary">
                       {i18nService.t('coworkMemoryEditingTag')}
                     </div>
                   )}
@@ -3265,7 +3265,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     onChange={(event) => setCoworkMemoryDraftText(event.target.value)}
                     placeholder={i18nService.t('coworkMemoryCrudTextPlaceholder')}
                     autoFocus
-                    className="min-h-[200px] w-full rounded-lg border px-3 py-2 text-sm border-border dark:bg-surface bg-surface text-foreground focus:border-primary focus:ring-1 focus:ring-primary/30"
+                    className="min-h-[200px] w-full rounded-md border px-3 py-2 text-sm border-border dark:bg-surface bg-surface text-foreground focus:border-primary focus:ring-2 focus:ring-primary/50"
                   />
                 </div>
 
@@ -3273,7 +3273,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                   <button
                     type="button"
                     onClick={resetCoworkMemoryEditor}
-                    className="px-3 py-1.5 text-sm text-foreground hover:bg-surface-raised rounded-xl border border-border transition-colors"
+                    className="px-3 py-1.5 text-sm text-foreground hover:bg-surface-raised rounded-md border border-border transition-colors"
                   >
                     {i18nService.t('cancel')}
                   </button>
@@ -3281,7 +3281,7 @@ const Settings: React.FC<SettingsProps> = ({ onClose, initialTab, notice, onUpda
                     type="button"
                     onClick={() => { void handleSaveCoworkMemoryEntry(); }}
                     disabled={!coworkMemoryDraftText.trim() || coworkMemoryListLoading}
-                    className="px-3 py-1.5 text-sm text-white bg-primary hover:bg-primaryHover rounded-xl disabled:opacity-60 disabled:cursor-not-allowed transition-colors active:scale-[0.98]"
+                    className="px-3 py-1.5 text-sm text-white bg-primary hover:bg-primaryHover rounded-md disabled:opacity-60 disabled:cursor-not-allowed transition-colors active:scale-pressed"
                   >
                     {coworkMemoryEditingId ? i18nService.t('save') : i18nService.t('coworkMemoryCrudCreate')}
                   </button>
